@@ -1,11 +1,104 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import Headerfile from '../components/Headerfile.astro';
+import Flower from '../components/Flower.astro';
+import Footerfile from '../components/Footerfile.astro';
 ---
 
 <Layout>
-	<Welcome />
+    <Headerfile />
+    <!-- <div id="body">
+        <div id="home">
+            <div id="text">
+                <p id="greetings">HELLO!</p>
+                <div id="nameflower">
+                    <p id="name">I'm Harneet</p>
+                    <Flower/>
+                </div>
+                <p id="introduction">Aspiring software engineer passionate about AI, data, and social impact.</p>
+            </div>
+            <div id="mypic">
+                <img src="me.jpeg" alt="Harneet's photo">
+            </div>
+        </div>
+    </div> -->
+   <Footerfile /> 
 </Layout>
+
+<style>
+    #aboutMe{
+        display:flex;
+        flex-direction: column;
+    }
+
+    #body{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 40px;
+        margin-bottom: 10px;
+    }
+
+
+    #home{
+        display: flex;
+        padding: 20px 40px;
+        align-items: center;
+        justify-content: center;
+        gap: 5%;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    #text{
+        flex: 1;
+        max-width: 600px;
+    }
+
+    #mypic{
+        max-width: 400px;
+        max-height: 500px;
+        flex-shrink: 0;
+    }
+
+    #mypic img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 10px;
+        display: block;
+    }
+
+    #nameflower{
+        display: flex;
+        gap: 5px;
+        align-items: flex-end;
+    }
+
+    #greetings{
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        color: #CFD6EE;
+        opacity: 0.7;
+        font-size: 24pt;
+        padding-bottom: 20px;
+    }
+
+    #name{
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        color: #EEDEDB;
+        font-size: 42px;
+        line-height: 1.2;
+        margin-bottom: 10px;
+    }
+
+    #introduction{
+        color: #CFD6EE;
+        font-size: 24pt;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        line-height: 1.5;
+    }
+
+    p{
+        margin: 0;
+    }
+</style>

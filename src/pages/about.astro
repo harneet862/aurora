@@ -1,0 +1,48 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Headerfile from '../components/Headerfile.astro';
+import Footerfile from '../components/Footerfile.astro';
+---
+
+<Layout>
+    <Headerfile />
+        <div id="about">
+            <p id="aboutme">About Me</p>
+                <ul id="text">
+                    <li>
+                        I chose computer science because I’m fascinated by how technology can be used to solve real-world problems. This interest grew into a passion for building data-driven and intelligent systems that create positive impact.
+                    </li>
+                    <li>
+                        Through my studies and projects, I’ve worked with machine learning, data analysis, and application development, including a wildfire prediction model and research in an AI4Good lab. I enjoy turning complex problems into practical tools.
+                    </li>
+                    <li>
+                        I’m especially interested in work that combines artificial intelligence, data, and social impact, and I hope to continue growing as a software engineer while contributing to meaningful and responsible projects.
+                    </li>
+                </ul>
+        </div>
+    <Footerfile />
+</Layout>
+
+<style>
+    #about{
+        display:flex;
+        flex-direction: column;
+        
+    }
+
+    #aboutme{
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        color: #EEDEDB;
+        font-size: 42pt;
+        line-height: 1.2;
+        margin-bottom: 10px;
+        justify-content: center;
+    }
+
+    #text{
+        color: #CFD6EE;
+        font-size: 18pt;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        line-height: 1.5;
+    }
+</style>

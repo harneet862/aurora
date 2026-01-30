@@ -1,0 +1,140 @@
+<div class = "timeline">
+
+    <div class= "event">
+        <div class="pos">
+            <h3>Software Engineer Intern</h3>
+            <h5>City of Edmonton</h5>
+            <ul class="duties">
+                <li>Developed an Android + Android Auto app with a one-tap reporting flow from 8 steps, improving usability in tests.</li>
+                <li>Built voice-driven reporting with speech-to-text and structured data storage for analytics.</li>
+            </ul>
+        </div>
+        <div class="company_logo">
+            <img class="logo" src="coe.jpg">
+        </div>
+        <div class="duration">
+            <h3>May 2025 - Dec 2025</h3>
+        </div>
+    </div>
+
+    <div class= "event">
+        <div class="pos">
+                <h3>Lab Research Assistant</h3>
+                <p> University of Alberta </p>
+                <ul class="duties">
+                    <li>Built an agent-based honey bee simulation modeling 400 bees with adjustable health/hunger states and real-time JS visualization.</li>
+                    <li>Engineered an OpenCV video-tracking pipeline processing ~90 hours of footage, automatically computing interaction probabilities across health/hunger combinations.</li>
+                </ul>
+        </div>
+        <div class="company_logo">
+            <img class="logo" src="uofa.jpg">
+        </div>
+        <div class="duration">
+            <h3>Jul 2024 - Aug 2024</h3>
+        </div>
+    </div>
+
+    <div class= "event">
+        <div class="pos">
+                <h3>Machine Learning Fellow</h3>
+                <p>AI4Good Lab</p>
+                <ul class="duties">
+                    <li>Engineered and cleaned Alberta wildfire/weather datasets (11,600+ events) and improved model accuracy from ~70–75% to 91% via feature engineering and XGBoost tuning.</li>
+                    <li>Automated data pipelines for ingestion, cleaning, and encoding, and visualized wildfire risk as color-coded maps, enabling stakeholders to interpret high- and low-risk zones quickly.</li>
+                </ul>
+        </div>
+        <div class="company_logo">
+            <img class="logo" src="ai4goodlab_logo.jpg">
+        </div>
+        <div class="duration">
+            <h3>May 2024 - Jul 2024</h3>
+        </div>
+    </div>
+
+</div>
+
+<style>
+
+    .pos{
+        width:40%;
+    }
+    .duties{
+        font-size: 16px;
+    }
+    .timeline{
+        width: 80%;
+        margin: 50px auto;
+        position: relative;
+    }
+
+    .timeline::before{
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 0;
+        width: 2px;
+        height: 100%;
+        background: #CFD6EE;
+        z-index: 1;
+        transform: translateX(-50%);
+    }
+
+    .logo{
+        width: 80%;
+        height: 80%;
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+        object-fit: cover;
+    }
+
+    .event{
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;;
+        position: relative;
+        margin: 40px;
+        color: #CFD6EE;
+        min-height: 60px;
+    }
+
+    .company_logo{
+        width: 60px;
+        height: 60px;
+        background: #cfd6eeb7;
+        border-radius: 50%;
+        position: absolute;
+        left: 50%;
+        top: 0;
+        transform: translateX(-50%);
+        z-index: 3;
+    }
+
+    .content{
+        margin-left: 20px;
+    }
+
+   .event:nth-child(odd) .duration{
+        position: absolute;
+        right: 10px;
+        top: 0px;
+   }
+
+   .event:nth-child(even) .duration{
+        position: absolute;
+        left: 10px;
+        top: 0px;
+   }
+
+   .event:nth-child(even) .pos{
+        margin-right: 0;
+        margin-left: auto;
+   }
+
+   .event:nth-child(odd) .pos{
+       margin-left: 0;
+       margin-right: auto;
+   }
+
+</style>

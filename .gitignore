@@ -1,6 +1,6 @@
+# Astro default ignores
 # build output
 dist/
-
 # generated types
 .astro/
 
@@ -20,5 +20,83 @@ pnpm-debug.log*
 # macOS-specific files
 .DS_Store
 
-# jetbrains setting folder
+# ===================================
+# RECOMMENDED ADDITIONS
+# ===================================
+
+# Environment variable files (all variants)
+.env.local
+.env.development
+.env.test
+.env.production.local
+.env.development.local
+.env.test.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
 .idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+Thumbs.db
+Desktop.ini
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# Yarn
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# pnpm
+.pnpm-debug.log*
+pnpm-lock.yaml  # Remove this line if you want to commit pnpm-lock.yaml
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Build files (if using additional build tools)
+.turbo/
+.vercel/
+.netlify/
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Storybook
+storybook-static/
+
+# Local database files (if applicable)
+*.db
+*.sqlite
+*.sqlite3
+
+# Backup files
+*.bak
+*.backup
+
+# Debug files
+debug.log
