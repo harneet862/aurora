@@ -8,18 +8,11 @@ import Footerfile from '../components/Footerfile.astro';
     <Headerfile />
     <main>
         <div id="about">
-            <p id="aboutme">About Me</p>
-                <ul id="text">
-                    <li>
-                        I'm a 3rd-year Computer Science student at the University of Alberta, passionate about using technology to solve real problems and building intelligent systems that create positive impact.
-                    </li>
-                    <li>
-                        My journey into CS began with Harvard's CS50 course, which sparked my interest in programming. Since then, I've been exploring machine learning, data analysis, and how AI can be used for social good.
-                    </li>
-                    <li>
-                        Outside of coding, I enjoy reading non-fiction, going for walks, and exploring new food places around the city.
-                    </li>
-                </ul>
+            <p id="overview">AN OVERVIEW OF ME</p>
+            <p id="aboutme">Introduction</p>
+                <p class="text">I’m a 3rd-year Computer Science student at the University of Alberta who enjoys using technology to solve real-world problems and build things that are actually useful.</p>
+                <p class="text">My interest in programming started with Harvard’s CS50 course, which introduced me to coding and problem-solving. Since then, I’ve been learning more about machine learning, data analysis, and how technology can be used to help people.</p>
+                <p class="text">Outside of coding, I like reading non-fiction, going for walks, and checking out new food spots around the city.</p>
         </div>
     </main>
     <Footerfile />
@@ -27,12 +20,17 @@ import Footerfile from '../components/Footerfile.astro';
 
 <style>
 
-    li{
-        margin-bottom: 1.5rem;
-    }
+
+   #overview{
+        font-size: clamp(0.8rem, 1.1vw, 1.1rem);
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        color: #CFD6EE;
+        opacity: 0.7;
+        margin-bottom: 1%;
+   }
 
     main{
-        min-width: 100vw;
+        min-height: calc(90vh - 160px);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -42,21 +40,22 @@ import Footerfile from '../components/Footerfile.astro';
         display:flex;
         flex-direction: column;
         max-width: 850px;
-        
+        align-items: center;
+        padding: 20px;
     }
 
     #aboutme{
         font-family: Georgia, 'Times New Roman', Times, serif;
         color: #EEDEDB;
-        font-size: clamp(2.5rem, 3vw, 5.5rem);
+        font-size: clamp(1.8rem, 3vw, 5.5rem);
         margin: 0.1%;
-        align-self: center;       
     }
 
-    #text{
+    .text {
         color: #CFD6EE;
-        font-size: clamp(1.2rem, 1.2vw, 3.5rem);
+        font-size: clamp(1rem, 1.2vw, 3.5rem);
         font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
         line-height: 1.5;
+        margin-bottom: 1%;
     }
 </style>
