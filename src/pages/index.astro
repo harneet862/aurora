@@ -7,47 +7,47 @@ import Footerfile from '../components/Footerfile.astro';
 
 <Layout>
     <Headerfile />
-    <!-- <div id="body">
-        <div id="home">
-            <div id="text">
-                <p id="greetings">HELLO!</p>
-                <div id="nameflower">
-                    <p id="name">I'm Harneet</p>
-                    <Flower/>
+        <main>
+            <div id="home">
+                <div id="text">
+                    <p id="greetings">HELLO!</p>
+                    <div id="nameflower">
+                        <p id="name">I'm Harneet</p>
+                        <Flower/>
+                    </div>
+                    <p id="introduction">Aspiring software engineer passionate about AI, data, and social impact.</p>
                 </div>
-                <p id="introduction">Aspiring software engineer passionate about AI, data, and social impact.</p>
+                <div id="mypic">
+                    <img src="me.jpeg" alt="Harneet's photo">
+                </div>
             </div>
-            <div id="mypic">
-                <img src="me.jpeg" alt="Harneet's photo">
-            </div>
-        </div>
-    </div> -->
+        </main>
    <Footerfile /> 
 </Layout>
 
 <style>
-    #aboutMe{
-        display:flex;
-        flex-direction: column;
-    }
-
-    #body{
+    main{
         display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        gap: 40px;
-        margin-bottom: 10px;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 100px);;
     }
-
 
     #home{
         display: flex;
-        padding: 20px 40px;
         align-items: center;
+        max-width: 850px;    
         justify-content: center;
         gap: 5%;
-        max-width: 1400px;
-        margin: 0 auto;
+        padding: 20px 14vw;
+    }
+
+    @media screen and (min-width: 850px) {
+
+        #home{
+            padding-left: clamp(1rem, 14vw, 9rem);
+            padding-right: clamp(1rem, 14vw, 9rem);
+        }
     }
 
     #text{
@@ -56,8 +56,8 @@ import Footerfile from '../components/Footerfile.astro';
     }
 
     #mypic{
-        max-width: 400px;
-        max-height: 500px;
+        max-width: 18rem;
+        max-height: 28rem;
         flex-shrink: 0;
     }
 
@@ -66,7 +66,12 @@ import Footerfile from '../components/Footerfile.astro';
         height: 100%;
         object-fit: cover;
         border-radius: 10px;
-        display: block;
+    }
+
+    @media screen and (max-width:800px) {
+        #mypic img{
+            display: none;
+        }
     }
 
     #nameflower{
@@ -79,21 +84,20 @@ import Footerfile from '../components/Footerfile.astro';
         font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
         color: #CFD6EE;
         opacity: 0.7;
-        font-size: 24pt;
-        padding-bottom: 20px;
+        font-size: clamp(1.5rem, 3vw, 3.5rem);
+        padding-bottom: 1.5%;
     }
 
     #name{
         font-family: Georgia, 'Times New Roman', Times, serif;
         color: #EEDEDB;
-        font-size: 42px;
-        line-height: 1.2;
-        margin-bottom: 10px;
+        font-size: clamp(2.5rem, 5vw, 5.5rem);
+        margin-bottom: 2%;
     }
 
     #introduction{
         color: #CFD6EE;
-        font-size: 24pt;
+        font-size: clamp(1.2rem, 1.6vw, 3.5rem);
         font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
         line-height: 1.5;
     }

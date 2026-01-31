@@ -3,23 +3,24 @@ import Flower from './Flower.astro';
 ---
 
 <nav class="nav">
-	<div class="left">
-		<a href="/">harneetk</a>
-		<Flower />
+	<div class="nav-inner">
+		<div class="left">
+			<a href="/">harneetk</a>
+			<Flower />
+		</div>
+		<div class="right">
+			<a href="/">HOME</a>
+			<a href="/about">ABOUT ME</a>
+			<a href="/skills">SKILLS</a>
+			<a href="/experiences">EXPERIENCE</a>
+			<a href="/projects">PROJECTS</a>
+		</div>
+		<button class="menu" aria-label="Toggle menu">
+			<div class="line"></div>
+			<div class="line"></div>
+			<div class="line"></div>
+		</button>
 	</div>
-	<div class="right">
-		<a href="/">HOME</a>
-		<a href="/about">ABOUT ME</a>
-		<a href="/skills">SKILLS</a>
-		<a href="/experiences">EXPERIENCE</a>
-		<a href="/projects">PROJECTS</a>
-		<a href="/contact">CONTACT ME</a>
-	</div>
-	<button class="menu" aria-label="Toggle menu">
-		<div class="line"></div>
-		<div class="line"></div>
-		<div class="line"></div>
-	</button>
 </nav>
 
 <div class="side-menu-overlay"></div>
@@ -32,7 +33,6 @@ import Flower from './Flower.astro';
 		<a href="/skills">Skills</a>
 		<a href="/experiences">Experience</a>
 		<a href="/projects">Projects</a>
-		<a href="/contact">Contact Me</a>
     </div>
 </div>
 
@@ -54,13 +54,15 @@ import Flower from './Flower.astro';
 
 <style>
 	.nav {
+		padding: 20px;
+	}
+
+	.nav-inner {
+		max-width: 900px;    
+		margin: 0 auto;      
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding: 20px 60px;
-		position: sticky;
-		top: 0;
-		z-index: 100;
 	}
 
 	.left {
@@ -190,33 +192,17 @@ import Flower from './Flower.astro';
 		background: rgba(30, 30, 46, 0.2);
 	}
 
-	@media screen and (max-width:950px) and (min-width:450px){
-
+	@media (min-width: 850px) {
 		.nav {
-			padding: 20px 40px;
-		}
-
-		.right {
-			display: none;
-		}
-
-		.menu {
-			display: flex;
-		}
-
-		.line {
-			width: 25px;
-			height: 2.5px;
-			margin: 2.0px 0;
+			padding-left: clamp(1rem, 2vw, 8rem);
+			padding-right: clamp(1rem, 2vw, 8rem);
 		}
 	}
-	@media screen and (max-width: 450px) and (min-width: 0px) {
-		.nav {
-			padding: 15px 20px;
-		}
+	
+	@media screen and (max-width: 850px){
 
 		.left a {
-			font-size: 1.5rem;
+			font-size: 1.6rem;
 		}
 
 		.right {
