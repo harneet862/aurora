@@ -1,10 +1,53 @@
 ---
 import Timeline from '../components/Timeline.astro'
+import Headerfile from '../components/Headerfile.astro';
+import Footerfile from '../components/Footerfile.astro';
+import Layout from '../layouts/Layout.astro';
+
 ---
-<div id="experiences">
+<Layout>
+    <Headerfile />
+        <div id="experiences">
             <div id="heading">
-                <p id="greetings" style="font-size: 14px; display:inline;">WHAT I'VE DONE SO FAR</p>
-                <p id="name" >Work Experience</p>
+                <p id="overview">WHAT I'VE DONE SO FAR</p>
+                <p id="exp" >Work Experience</p>
             </div>
             <Timeline />
-</div>
+        </div>
+    <Footerfile />
+</Layout>
+
+<style>
+    #experiences {
+        width: min(100%, 850px);
+        margin: 0 auto;
+        padding: 0 1.25rem;
+        box-sizing: border-box;
+    }
+
+    #heading{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    #overview{
+        font-size: clamp(0.8rem, 1.1vw, 1.1rem);
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        color: #CFD6EE;
+        opacity: 0.7;
+        margin-bottom: 1%;
+   }
+
+   #exp{
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        color: #EEDEDB;
+        font-size: clamp(1.8rem, 3vw, 5.5rem);
+        margin: 0.1%;
+    }
+
+    @media (max-width: 650px) {
+        #experiences {
+            padding: 0 1rem;
+        }
+    }
+</style>

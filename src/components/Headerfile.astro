@@ -26,13 +26,15 @@ import Flower from './Flower.astro';
 <div class="side-menu-overlay"></div>
 
 <div class="side-menu">
-    <button class="close-btn" aria-label="Close menu">&times;</button>
-	<div class="side-menu-links">
-		<a href="/">Home</a>
-        <a href="/about">About Me</a>
-		<a href="/skills">Skills</a>
-		<a href="/experiences">Experience</a>
-		<a href="/projects">Projects</a>
+    <div class="menu-top">
+        <button class="close-btn" aria-label="Close menu">&times;</button>
+    </div>
+	<div class="side-menu-links" aria-label="Mobile navigation">
+		<a href="/"><span>01</span>Home</a>
+		<a href="/about"><span>02</span>About Me</a>
+		<a href="/skills"><span>03</span>Skills</a>
+		<a href="/experiences"><span>04</span>Experience</a>
+		<a href="/projects"><span>05</span>Projects</a>
     </div>
 </div>
 
@@ -55,6 +57,10 @@ import Flower from './Flower.astro';
 <style>
 	.nav {
 		padding: 20px;
+		position: sticky;
+		top: 0;
+		z-index: 20;
+		background: #1E1E2E;
 	}
 
 	.nav-inner {
@@ -136,10 +142,12 @@ import Flower from './Flower.astro';
 		position: fixed;
 		top: 0;
 		right: -100%;
-		width: min(250px, 40vw);
+		width: min(19rem, 82vw);
 		height: 100vh;
-		background-color: #CFD6EE;
-		padding: 3.75rem 1.875rem;
+		box-sizing: border-box;
+		background-color: #1E1E2E;
+		border-left: 1px solid rgba(207, 214, 238, 0.3);
+		padding: 1.5rem;
 		transition: right 0.3s ease;
 		z-index: 1000;
 	}
@@ -148,48 +156,61 @@ import Flower from './Flower.astro';
 		right: 0;
 	}
 
+	.menu-top {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		padding-bottom: 0.35rem;
+	}
+
 	.side-menu-links {
 		display: flex;
 		flex-direction: column;
-		gap: 2.5rem;
-		align-items: center;
-		margin-top: 2rem;
+		gap: 0;
+		margin-top: 0.75rem;
 	}
 
 	.side-menu-links a {
-		color: #1E1E2E;
-		font-family: sans-serif;
+		display: flex;
+		align-items: baseline;
+		gap: 0.8rem;
+		padding: 1rem 0;
+		border-bottom: 1px solid rgba(207, 214, 238, 0.14);
+		color: #EEDEDB;
+		font-family: Georgia, 'Times New Roman', serif;
 		text-decoration: none;
 		font-size: 1.3rem;
-		font-weight: 530;
-		transition: transform 0.2s, color 0.2s;
-		letter-spacing: 0.02rem;
+		transition: padding 0.2s, color 0.2s;
+	}
+
+	.side-menu-links a span {
+		color: #CFD6EE;
+		opacity: 0.6;
+		font: 0.7rem 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif;
+		letter-spacing: 0.08em;
 	}
 
 	.side-menu-links a:hover {
-		color: #4a4a5e;
-		transform: translateX(-5px);
+		color: #CFD6EE;
+		padding-left: 0.4rem;
 	}
 
 	.close-btn {
-		position: absolute;
-		top: 1.25rem;
-		right: 1.25rem;
-		background: rgba(30, 30, 46, 0.1);
+		background: transparent;
 		border: none;
-		border-radius: 50%;
-		color: #1E1E2E;
-		font-size: 2.5rem;
+		color: #CFD6EE;
+		font-size: 2rem;
 		cursor: pointer;
-		width: 2.5rem;
-		height: 2.5rem;
+		width: 2rem;
+		height: 2rem;
+		padding: 0;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 	}
 
 	.close-btn:hover {
-		background: rgba(30, 30, 46, 0.2);
+		color: #EEDEDB;
 	}
 
 	@media (min-width: 850px) {

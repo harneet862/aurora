@@ -1,140 +1,207 @@
-<div class = "timeline">
+---
+const experiences = [
+    {
+        period: 'Apr 2026 – Dec 2026',
+        role: 'Software Engineering Intern',
+        organization: 'RLCore · Edmonton, Alberta',
+        logo: 'rlcore.jpg',
+        logoAlt: 'RLCore logo',
+        highlights: [
+            'Localized 126 components with 1,274 translation strings using Paraglide JS, then prevented hardcoded-string regressions by building a custom ESLint rule enforced as a merge-blocking CI gate.',
+            'Saved 200+ hours of CI compute time across 35 runs by building a staged GitHub Actions pipeline with pass-dependent gating, skipping expensive test stages when earlier stages fail.'
+        ],
+        skills: ['Backend', 'Github Actions', 'FastAPI', 'SQL']
+    },
+    {
+        period: 'May 2025 – Nov 2025',
+        role: 'Software Developer Intern',
+        organization: 'City of Edmonton · Edmonton, Alberta',
+        logo: 'coe.jpg',
+        logoAlt: 'City of Edmonton logo',
+        logoClass: 'city-logo',
+        highlights: [
+            'Developed a full-stack Android Auto–compatible citizen-reporting prototype app (Java, Firebase), cutting submission time by 40s by replacing nested-list navigation with a single-screen tap-and-speak interface.',
+            'Ensured application reliability across feature and architectural changes, achieving ∼80% code coverage, by developing JUnit test suites covering core reporting workflows and application logic'
+        ],
+        skills: ['Android', 'Android Auto', 'Speech-to-Text', 'Data Analytics']
+    },
+    {
+        period: 'Jul 2024 – Aug 2024',
+        role: 'Lab Research Assistant',
+        organization: 'University of Alberta · Edmonton, Alberta',
+        logo: 'uofa.jpg',
+        logoAlt: 'University of Alberta logo',
+        logoClass: '',
+        highlights: [
+            'Built an agent-based honey bee simulation modelling 400 bees with adjustable health and hunger states, plus real-time JavaScript visualization.',
+            'Engineered an OpenCV video-tracking pipeline for roughly 90 hours of footage to calculate interaction probabilities across bee health and hunger combinations.'
+        ],
+        skills: ['Python', 'JavaScript', 'OpenCV', 'Data Analysis']
+    },
+    {
+        period: 'May 2024 – Jul 2024',
+        role: 'Machine Learning Fellow',
+        organization: 'AI4Good Lab · Edmonton, Alberta',
+        logo: 'ai4goodlab_logo.jpg',
+        logoAlt: 'AI4Good Lab logo',
+        logoClass: '',
+        highlights: [
+            'Cleaned and engineered Alberta wildfire and weather datasets containing 11,600+ events, improving model accuracy from approximately 70–75% to 91% through feature engineering and XGBoost tuning.',
+            'Automated data pipelines for ingestion, cleaning, and encoding, then visualized wildfire risk as colour-coded maps for stakeholders.'
+        ],
+        skills: ['Python', 'XGBoost', 'Machine Learning', 'Data Visualization']
+    }
+];
+---
 
-    <div class= "event">
-        <div class="pos">
-            <h3>Software Engineer Intern</h3>
-            <h5>City of Edmonton</h5>
-            <ul class="duties">
-                <li>Developed an Android + Android Auto app with a one-tap reporting flow from 8 steps, improving usability in tests.</li>
-                <li>Built voice-driven reporting with speech-to-text and structured data storage for analytics.</li>
-            </ul>
-        </div>
-        <div class="company_logo">
-            <img class="logo" src="coe.jpg">
-        </div>
-        <div class="duration">
-            <h3>May 2025 - Dec 2025</h3>
-        </div>
-    </div>
-
-    <div class= "event">
-        <div class="pos">
-                <h3>Lab Research Assistant</h3>
-                <p> University of Alberta </p>
-                <ul class="duties">
-                    <li>Built an agent-based honey bee simulation modeling 400 bees with adjustable health/hunger states and real-time JS visualization.</li>
-                    <li>Engineered an OpenCV video-tracking pipeline processing ~90 hours of footage, automatically computing interaction probabilities across health/hunger combinations.</li>
+<div class="experience-list">
+    {experiences.map((experience) => (
+        <article class="experience">
+            <div class="date-column">
+                <p class="period">{experience.period}</p>
+                <div class="logo-frame">
+                    <img class:list={['company-logo', experience.logoClass]} src={experience.logo} alt={experience.logoAlt} />
+                </div>
+            </div>
+            <div class="experience-details">
+                <h2>{experience.role}</h2>
+                <p class="organization">{experience.organization}</p>
+                <ul class="highlights">
+                    {experience.highlights.map((highlight) => <li>{highlight}</li>)}
                 </ul>
-        </div>
-        <div class="company_logo">
-            <img class="logo" src="uofa.jpg">
-        </div>
-        <div class="duration">
-            <h3>Jul 2024 - Aug 2024</h3>
-        </div>
-    </div>
-
-    <div class= "event">
-        <div class="pos">
-                <h3>Machine Learning Fellow</h3>
-                <p>AI4Good Lab</p>
-                <ul class="duties">
-                    <li>Engineered and cleaned Alberta wildfire/weather datasets (11,600+ events) and improved model accuracy from ~70–75% to 91% via feature engineering and XGBoost tuning.</li>
-                    <li>Automated data pipelines for ingestion, cleaning, and encoding, and visualized wildfire risk as color-coded maps, enabling stakeholders to interpret high- and low-risk zones quickly.</li>
+                <ul class="skills" aria-label={`${experience.role} technologies`}>
+                    {experience.skills.map((skill) => <li>{skill}</li>)}
                 </ul>
-        </div>
-        <div class="company_logo">
-            <img class="logo" src="ai4goodlab_logo.jpg">
-        </div>
-        <div class="duration">
-            <h3>May 2024 - Jul 2024</h3>
-        </div>
-    </div>
-
+            </div>
+        </article>
+    ))}
 </div>
 
 <style>
-
-    .pos{
-        width:40%;
-    }
-    .duties{
-        font-size: 16px;
-    }
-    .timeline{
-        width: 80%;
-        margin: 50px auto;
-        position: relative;
+    .experience-list {
+        width: 100%;
+        margin: 2.75rem 0 6rem;
     }
 
-    .timeline::before{
-        content: "";
-        position: absolute;
-        left: 50%;
-        top: 0;
-        width: 2px;
-        height: 100%;
-        background: #CFD6EE;
-        z-index: 1;
-        transform: translateX(-50%);
+    .experience {
+        display: grid;
+        grid-template-columns: 9rem minmax(0, 1fr);
+        column-gap: clamp(1.5rem, 3vw, 2.5rem);
+        padding: 0 0 2.25rem;
     }
 
-    .logo{
-        width: 80%;
-        height: 80%;
-        border-radius: 50%;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 2;
-        object-fit: cover;
+    .experience + .experience {
+        padding-top: 2.25rem;
+        border-top: 1px solid rgba(207, 214, 238, 0.2);
     }
 
-    .event{
-        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;;
-        position: relative;
-        margin: 40px;
+    .period {
+        margin: 0;
         color: #CFD6EE;
-        min-height: 60px;
+        font: clamp(0.78rem, 0.95vw, 0.9rem)/1.4 'Lucida Sans', 'Lucida Grande', sans-serif;
+        opacity: 0.8;
     }
 
-    .company_logo{
-        width: 60px;
-        height: 60px;
-        background: #cfd6eeb7;
+    .date-column {
+        align-self: start;
+        padding-top: 0.25rem;
+    }
+
+    .experience-details {
+        min-width: 0;
+    }
+
+    .logo-frame {
+        width: 3rem;
+        height: 3rem;
+        margin-top: 0.75rem;
         border-radius: 50%;
-        position: absolute;
-        left: 50%;
-        top: 0;
-        transform: translateX(-50%);
-        z-index: 3;
+        background: rgba(207, 214, 238, 0.9);
+        overflow: hidden;
+        display: grid;
+        place-items: center;
     }
 
-    .content{
-        margin-left: 20px;
+    .company-logo {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        padding: 0.25rem;
+        box-sizing: border-box;
     }
 
-   .event:nth-child(odd) .duration{
-        position: absolute;
-        right: 10px;
-        top: 0px;
-   }
+    .city-logo {
+        width: 65%;
+        height: 65%;
+        padding: 0;
+    }
 
-   .event:nth-child(even) .duration{
-        position: absolute;
-        left: 10px;
-        top: 0px;
-   }
+    h2 {
+        margin: 0;
+        color: #EEDEDB;
+        font: clamp(1.35rem, 2vw, 1.65rem) Georgia, 'Times New Roman', serif;
+        font-weight: 400;
+    }
 
-   .event:nth-child(even) .pos{
-        margin-right: 0;
-        margin-left: auto;
-   }
+    .organization {
+        margin: 0.4rem 0 1.2rem;
+        color: #CFD6EE;
+        opacity: 0.8;
+        font: clamp(0.88rem, 1.1vw, 1rem)/1.45 'Lucida Sans', 'Lucida Grande', sans-serif;
+    }
 
-   .event:nth-child(odd) .pos{
-       margin-left: 0;
-       margin-right: auto;
-   }
+    .highlights {
+        display: grid;
+        gap: 0.65rem;
+        margin: 0 0 1.25rem;
+        padding-left: 1.25rem;
+        color: #CFD6EE;
+        font: clamp(0.82rem, 1.2vw, 0.94rem)/1.55 'Lucida Sans', 'Lucida Grande', sans-serif;
+    }
 
+    .highlights li::marker {
+        color: rgba(207, 214, 238, 0.55);
+    }
+
+    .skills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .skills li {
+        padding: 0.38rem 0.75rem;
+        border-radius: 999px;
+        color: #1E1E2E;
+        background: rgba(207, 214, 238, 0.88);
+        font: 0.72rem 'Lucida Sans', 'Lucida Grande', sans-serif;
+    }
+
+    @media (max-width: 650px) {
+        .experience-list {
+            margin-top: 2.25rem;
+        }
+
+        .experience {
+            grid-template-columns: 1fr;
+            gap: 0.7rem;
+        }
+
+        .date-column {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding-top: 0;
+        }
+
+        .logo-frame {
+            width: 2.5rem;
+            height: 2.5rem;
+            margin-top: 0;
+        }
+    }
 </style>
