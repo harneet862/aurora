@@ -21,12 +21,25 @@
 		width: 100%;
 		height: 100%;
 		background-color: #1E1E2E;
+		/* Keep page width consistent when routes have different amounts of content. */
+		scrollbar-gutter: stable;
+		overflow-x: clip;
 	}
+
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+	}
+
 	body {
 		margin: 0;
 		width: 100%;
 		min-height: 100%;
 		background-color: #1E1E2E;
+		overflow-x: clip;
+		/* A reserved scrollbar prevents horizontal jumps between short and long pages. */
+		overflow-y: scroll;
 	}
 
 	.site-shell {
