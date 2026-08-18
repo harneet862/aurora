@@ -9,11 +9,11 @@ import Flower from './Flower.astro';
 			<Flower />
 		</div>
 		<div class="right">
-			<a href="/">HOME</a>
-			<a href="/about">ABOUT ME</a>
-			<a href="/skills">SKILLS</a>
-			<a href="/experiences">EXPERIENCE</a>
-			<a href="/projects">PROJECTS</a>
+			<a href="/#home">HOME</a>
+			<a href="/#about">ABOUT ME</a>
+			<a href="/#skills">SKILLS</a>
+			<a href="/#experiences">EXPERIENCE</a>
+			<a href="/#projects">PROJECTS</a>
 		</div>
 		<button class="menu" aria-label="Toggle menu">
 			<div class="line"></div>
@@ -30,11 +30,11 @@ import Flower from './Flower.astro';
         <button class="close-btn" aria-label="Close menu">&times;</button>
     </div>
 	<div class="side-menu-links" aria-label="Mobile navigation">
-		<a href="/"><span>01</span>Home</a>
-		<a href="/about"><span>02</span>About Me</a>
-		<a href="/skills"><span>03</span>Skills</a>
-		<a href="/experiences"><span>04</span>Experience</a>
-		<a href="/projects"><span>05</span>Projects</a>
+		<a href="/#home"><span>01</span>Home</a>
+		<a href="/#about"><span>02</span>About Me</a>
+		<a href="/#skills"><span>03</span>Skills</a>
+		<a href="/#experiences"><span>04</span>Experience</a>
+		<a href="/#projects"><span>05</span>Projects</a>
     </div>
 </div>
 
@@ -52,6 +52,12 @@ import Flower from './Flower.astro';
 	menuBtn?.addEventListener('click', toggleMenu);
 	clBtn?.addEventListener('click', toggleMenu);
 	overlay?.addEventListener('click', toggleMenu);
+
+	document.querySelectorAll('.side-menu-links a').forEach((link) => {
+		link.addEventListener('click', () => {
+			if (sideMenu?.classList.contains('active')) toggleMenu();
+		});
+	});
 </script>
 
 <style>

@@ -15,6 +15,25 @@
 	</body>
 </html>
 
+<style is:global>
+	:root {
+		/* Shared page width used by every section's inner content. */
+		--content-max: 850px;
+		/* Horizontal breathing room for sections on narrow/medium viewports. */
+		--section-px: 1.25rem;
+		/* Vertical rhythm scale, reused so section spacing stays on-grid. */
+		--section-py-sm: 2rem;
+		--section-py-md: 3rem;
+		--section-py-lg: 4rem;
+		--section-py-xl: 6rem;
+		/* Sticky header height reserved so full-height sections don't overflow the viewport. */
+		--header-offset-hero: 100px;
+		--header-offset: 160px;
+		/* Scroll-to-anchor offset so jump links land below the sticky header. */
+		--scroll-offset: 6.5rem;
+	}
+</style>
+
 <style>
 	html{
 		margin: 0;
@@ -24,6 +43,9 @@
 		/* Keep page width consistent when routes have different amounts of content. */
 		scrollbar-gutter: stable;
 		overflow-x: clip;
+		scroll-behavior: smooth;
+		/* Proximity (not mandatory) so #experiences, which isn't viewport-height, doesn't fight the user's scroll. */
+		scroll-snap-type: y proximity;
 	}
 
 	*,
