@@ -15,6 +15,18 @@
 	</body>
 </html>
 
+<script>
+	function setChromeHeights() {
+		const nav = document.querySelector('nav.nav');
+		const footer = document.querySelector('footer');
+		const root = document.documentElement;
+		if (nav) root.style.setProperty('--header-h', `${nav.getBoundingClientRect().height}px`);
+		if (footer) root.style.setProperty('--footer-h', `${footer.getBoundingClientRect().height}px`);
+	}
+	setChromeHeights();
+	window.addEventListener('resize', setChromeHeights);
+</script>
+
 <style is:global>
 	:root {
 		/* Shared page width used by every section's inner content. */
@@ -29,8 +41,9 @@
 		/* Sticky header height reserved so full-height sections don't overflow the viewport. */
 		--header-offset-hero: 100px;
 		--header-offset: 160px;
-		/* Scroll-to-anchor offset so jump links land below the sticky header. */
-		--scroll-offset: 6.5rem;
+		/* Measured on load/resize by Layout.astro's script; these are just first-paint fallbacks. */
+		--header-h: 73px;
+		--footer-h: 70px;
 	}
 </style>
 
@@ -59,9 +72,6 @@
 		width: 100%;
 		min-height: 100%;
 		background-color: #1E1E2E;
-		overflow-x: clip;
-		/* A reserved scrollbar prevents horizontal jumps between short and long pages. */
-		overflow-y: scroll;
 	}
 
 	.site-shell {

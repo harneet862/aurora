@@ -84,7 +84,7 @@ const skillGroups = [
     }
 
     main > section {
-        scroll-margin-top: var(--scroll-offset);
+        scroll-margin-top: var(--header-h);
         scroll-snap-align: start;
     }
 
@@ -93,7 +93,7 @@ const skillGroups = [
         font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
         color: #CFD6EE;
         opacity: 0.7;
-        margin-bottom: 1%;
+        margin-bottom: 0.5em;
     }
 
     .section-heading {
@@ -101,7 +101,7 @@ const skillGroups = [
         color: #EEDEDB;
         font-size: clamp(1.8rem, 3vw, 5.5rem);
         font-weight: 400;
-        margin: 0.1%;
+        margin: 0 0 0.3em;
     }
 
     p {
@@ -113,18 +113,9 @@ const skillGroups = [
         display: flex;
         justify-content: center;
         align-items: center;
-        min-height: calc(100vh - var(--header-offset-hero));
-        max-width: var(--content-max);
-        margin: 0 auto;
+        min-height: min(calc(100vh - var(--header-offset-hero)), 42rem);
         gap: 5%;
-        padding: 20px 14vw;
-    }
-
-    @media screen and (min-width: 850px) {
-        #home {
-            padding-left: clamp(1rem, 14vw, 9rem);
-            padding-right: clamp(1rem, 14vw, 9rem);
-        }
+        padding: clamp(1.25rem, 4vh, 2rem) clamp(1.25rem, 14vw, 9rem);
     }
 
     #text {
@@ -181,18 +172,18 @@ const skillGroups = [
 
     /* About */
     #about {
-        min-height: calc(100vh - var(--header-offset));
-        display: grid;
-        place-items: center;
-        padding: var(--section-py-sm) var(--section-px);
+        display: flex;
+        justify-content: center;
+        padding: 0 clamp(1.25rem, 14vw, 9rem);
+        height: min(calc(100vh - var(--header-offset-hero)), 42rem);
     }
 
     .about-content {
         display: flex;
+        justify-content: center;
         flex-direction: column;
         width: min(100%, var(--content-max));
         margin: 0 auto;
-        padding: var(--section-px);
     }
 
     #about .eyebrow,
@@ -212,50 +203,54 @@ const skillGroups = [
 
     /* Skills */
     #skills {
-        min-height: calc(100vh - var(--header-offset));
-        padding: var(--section-py-md) var(--section-px) var(--section-py-xl);
+        display: flex;
+        align-items: center;
+        padding: clamp(1.5rem, 6vh, 3rem) clamp(1.25rem, 14vw, 9rem);
+        min-height: min(calc(100vh - var(--header-offset-hero)), 42rem);
     }
 
     .skills-inner {
         max-width: var(--content-max);
         margin: 0 auto;
+        width: 100%;
     }
 
     .heading {
-        margin-bottom: 3.5rem;
+        margin-bottom: clamp(1rem, 5vh, 3.5rem);
         text-align: center;
     }
 
     .skills-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        column-gap: clamp(3rem, 10vw, 8rem);
-        row-gap: 3.5rem;
+        column-gap: clamp(1.5rem, 8vw, 8rem);
+        row-gap: clamp(0.75rem, 4vh, 3.5rem);
     }
 
     .skill-group h2 {
-        margin: 0 0 1.25rem;
+        margin: 0 0 clamp(0.4rem, 2vh, 1.25rem);
         color: #EEDEDB;
-        font: clamp(1.35rem, 2vw, 1.65rem) Georgia, 'Times New Roman', serif;
+        font: clamp(1rem, 1vw + 1.4vh, 1.65rem) Georgia, 'Times New Roman', serif;
         font-weight: 400;
     }
 
     .skill-group ul {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.75rem;
+        gap: clamp(0.35rem, 1vh, 0.75rem);
         margin: 0;
         padding: 0;
         list-style: none;
     }
 
     .skill-group li {
-        padding: 0.48rem 0.9rem;
+        padding: clamp(0.25rem, 1vh, 0.48rem) clamp(0.5rem, 1.5vw, 0.9rem);
         border: 1px solid rgba(207, 214, 238, 0.4);
         border-radius: 999px;
         color: #CFD6EE;
-        font: 0.92rem 'Lucida Sans', 'Lucida Grande', sans-serif;
+        font: clamp(0.72rem, 0.5vw + 0.9vh, 0.92rem) 'Lucida Sans', 'Lucida Grande', sans-serif;
         transition: background-color 0.2s ease, color 0.2s ease;
+        white-space: nowrap;
     }
 
     .skill-group li:hover {
@@ -264,25 +259,21 @@ const skillGroups = [
     }
 
     @media (max-width: 600px) {
-        #skills {
-            padding-top: 2rem;
-        }
-
-        .heading {
-            margin-bottom: 2.5rem;
-        }
-
         .skills-grid {
-            grid-template-columns: 1fr;
-            gap: 2.5rem;
+            column-gap: clamp(1rem, 5vw, 2rem);
+        }
+
+        .skill-group li {
+            white-space: normal;
         }
     }
 
     /* Experiences */
     #experiences {
-        width: min(100%, var(--content-max));
-        margin: 0 auto;
-        padding: var(--section-py-lg) var(--section-px) var(--section-py-sm);
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - var(--header-h) - var(--footer-h));
+        padding: clamp(1.5rem, 6vh, 3rem) clamp(1.25rem, 14vw, 9rem);
         box-sizing: border-box;
     }
 
@@ -290,20 +281,18 @@ const skillGroups = [
         display: flex;
         flex-direction: column;
         align-items: center;
-    }
-
-    @media (max-width: 650px) {
-        #experiences {
-            padding: 3rem 1rem 1rem;
-        }
+        width: 100%;
+        max-width: var(--content-max);
+        margin: 0 auto clamp(1rem, 4vh, 2rem);
     }
 
     /* Projects */
     #projects {
-        min-height: calc(100vh - var(--header-offset));
         display: grid;
         place-items: center;
-        padding: var(--section-py-sm) var(--section-px);
+        height: calc(100vh - var(--header-h) - var(--footer-h));
+        padding: clamp(1.5rem, 6vh, 3rem) clamp(1.25rem, 14vw, 9rem);
+        box-sizing: border-box;
         text-align: center;
     }
 </style>

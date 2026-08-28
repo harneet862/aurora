@@ -4,6 +4,7 @@ const experiences = [
         period: 'Apr 2026 – Dec 2026',
         role: 'Software Engineering Intern',
         organization: 'RLCore · Edmonton, Alberta',
+        tabLabel: 'RLCore',
         logo: 'rlcore.jpg',
         logoAlt: 'RLCore logo',
         highlights: [
@@ -16,6 +17,7 @@ const experiences = [
         period: 'May 2025 – Nov 2025',
         role: 'Software Developer Intern',
         organization: 'City of Edmonton · Edmonton, Alberta',
+        tabLabel: 'City of Edmonton',
         logo: 'coe.jpg',
         logoAlt: 'City of Edmonton logo',
         logoClass: 'city-logo',
@@ -29,6 +31,7 @@ const experiences = [
         period: 'Jul 2024 – Aug 2024',
         role: 'Lab Research Assistant',
         organization: 'University of Alberta · Edmonton, Alberta',
+        tabLabel: 'University of Alberta',
         logo: 'uofa.jpg',
         logoAlt: 'University of Alberta logo',
         logoClass: '',
@@ -42,6 +45,7 @@ const experiences = [
         period: 'May 2024 – Jul 2024',
         role: 'Machine Learning Fellow',
         organization: 'AI4Good Lab · Edmonton, Alberta',
+        tabLabel: 'AI4Good Lab',
         logo: 'ai4goodlab_logo.jpg',
         logoAlt: 'AI4Good Lab logo',
         logoClass: '',
@@ -54,72 +58,193 @@ const experiences = [
 ];
 ---
 
-<div class="experience-list">
-    {experiences.map((experience) => (
-        <article class="experience">
-            <div class="date-column">
-                <p class="period">{experience.period}</p>
-                <div class="logo-frame">
+<div class="experience-shell">
+    <div class="experience-timeline" role="tablist" aria-label="Work experience roles">
+        <div class="timeline-track" aria-hidden="true"></div>
+        {experiences.map((experience, i) => (
+            <button
+                class="timeline-node"
+                role="tab"
+                type="button"
+                aria-selected={i === 0 ? 'true' : 'false'}
+                aria-controls={`panel-${i}`}
+                id={`tab-${i}`}
+                data-index={i}
+            >
+                <span class="node-dot">
                     <img class:list={['company-logo', experience.logoClass]} src={experience.logo} alt={experience.logoAlt} />
+                </span>
+                <span class="node-org">{experience.tabLabel}</span>
+                <span class="node-period">{experience.period}</span>
+            </button>
+        ))}
+    </div>
+
+    <div class="experience-panels">
+        {experiences.map((experience, i) => (
+            <article
+                class="panel"
+                role="tabpanel"
+                id={`panel-${i}`}
+                aria-labelledby={`tab-${i}`}
+                data-index={i}
+                hidden={i !== 0}
+            >
+                <div class="panel-header">
+                    <h2>{experience.role}</h2>
+                    <p class="organization">{experience.organization}</p>
                 </div>
-            </div>
-            <div class="experience-details">
-                <h2>{experience.role}</h2>
-                <p class="organization">{experience.organization}</p>
                 <ul class="highlights">
                     {experience.highlights.map((highlight) => <li>{highlight}</li>)}
                 </ul>
                 <ul class="skills" aria-label={`${experience.role} technologies`}>
                     {experience.skills.map((skill) => <li>{skill}</li>)}
                 </ul>
-            </div>
-        </article>
-    ))}
+            </article>
+        ))}
+    </div>
 </div>
 
+<script>
+    const nodes = document.querySelectorAll<HTMLButtonElement>('.experience-timeline .timeline-node');
+    const panels = document.querySelectorAll<HTMLElement>('.experience-panels .panel');
+
+    nodes.forEach((node) => {
+        node.addEventListener('click', () => {
+            const index = node.dataset.index;
+            nodes.forEach((n) => n.setAttribute('aria-selected', n === node ? 'true' : 'false'));
+            panels.forEach((p) => {
+                p.hidden = p.dataset.index !== index;
+            });
+        });
+    });
+</script>
+
 <style>
-    .experience-list {
+    .experience-shell {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
         width: 100%;
-        margin: 2.75rem 0 6rem;
+        max-width: var(--content-max);
+        margin: 0 auto;
+        gap: clamp(1rem, 4vh, 2rem);
     }
 
-    .experience {
-        display: grid;
-        grid-template-columns: 9rem minmax(0, 1fr);
-        column-gap: clamp(1.5rem, 3vw, 2.5rem);
-        padding: 0 0 2.25rem;
-    }
-
-    .experience + .experience {
-        padding-top: 2.25rem;
-        border-top: 1px solid rgba(207, 214, 238, 0.2);
-    }
-
-    .period {
-        margin: 0;
-        color: #CFD6EE;
-        font: clamp(0.78rem, 0.95vw, 0.9rem)/1.4 'Lucida Sans', 'Lucida Grande', sans-serif;
-        opacity: 0.8;
-    }
-
-    .date-column {
-        align-self: start;
+    /* Timeline */
+    .experience-timeline {
+        --node-size: clamp(2.75rem, 3vw + 3vh, 4rem);
+        position: relative;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.25rem;
         padding-top: 0.25rem;
     }
 
-    .experience-details {
-        min-width: 0;
+    .timeline-track {
+        position: absolute;
+        top: calc(var(--node-size) / 2 + 0.25rem - 1px);
+        left: calc(var(--node-size) / 2);
+        right: calc(var(--node-size) / 2);
+        height: 2px;
+        background: rgba(207, 214, 238, 0.25);
+        z-index: 0;
     }
 
-    .logo-frame {
-        width: 3rem;
-        height: 3rem;
-        margin-top: 0.75rem;
+    .timeline-node {
+        position: relative;
+        z-index: 1;
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: clamp(0.3rem, 1vh, 0.5rem);
+        padding: 0;
+        border: none;
+        background: transparent;
+        color: #CFD6EE;
+        font-family: 'Lucida Sans', 'Lucida Grande', sans-serif;
+        cursor: pointer;
+    }
+
+    .node-dot {
+        width: var(--node-size);
+        height: var(--node-size);
+        flex-shrink: 0;
         border-radius: 50%;
-        background: rgba(207, 214, 238, 0.9);
-        overflow: hidden;
+        background: rgba(207, 214, 238, 0.92);
         display: grid;
         place-items: center;
+        overflow: hidden;
+        border: 2px solid transparent;
+        transition: transform 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+    }
+
+    .node-org {
+        max-width: 8rem;
+        font-size: clamp(0.68rem, 0.4vw + 0.7vh, 0.85rem);
+        line-height: 1.2;
+        text-align: center;
+        opacity: 0.75;
+        transition: opacity 0.2s ease, color 0.2s ease;
+    }
+
+    .node-period {
+        font-size: clamp(0.58rem, 0.3vw + 0.5vh, 0.68rem);
+        opacity: 0.5;
+    }
+
+    .timeline-node:hover .node-dot {
+        transform: scale(1.08);
+    }
+
+    .timeline-node[aria-selected="false"] .node-dot {
+        opacity: 0.6;
+    }
+
+    .timeline-node[aria-selected="true"] .node-dot {
+        transform: scale(1.15);
+        border-color: #EEDEDB;
+    }
+
+    .timeline-node[aria-selected="true"] .node-org {
+        opacity: 1;
+        color: #EEDEDB;
+    }
+
+    @media (max-width: 480px) {
+        .node-period {
+            display: none;
+        }
+
+        .node-org {
+            max-width: 4.5rem;
+        }
+    }
+
+    /* Panels */
+    .experience-panels {
+        flex: 1;
+        min-height: 0;
+    }
+
+    .panel {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        /* height: 100%; */
+        overflow-y: auto;
+    }
+
+    .panel[hidden] {
+        display: none;
+    }
+
+    .panel-header {
+        text-align: center;
+        margin-bottom: clamp(0.6rem, 2.5vh, 1.25rem);
     }
 
     .company-logo {
@@ -137,27 +262,28 @@ const experiences = [
         padding: 0;
     }
 
-    h2 {
+    .panel-header h2 {
         margin: 0;
         color: #EEDEDB;
-        font: clamp(1.35rem, 2vw, 1.65rem) Georgia, 'Times New Roman', serif;
+        font: clamp(1.25rem, 1vw + 1.6vh, 1.75rem) Georgia, 'Times New Roman', serif;
         font-weight: 400;
     }
 
     .organization {
-        margin: 0.4rem 0 1.2rem;
+        margin: 0.3rem 0 0;
         color: #CFD6EE;
         opacity: 0.8;
-        font: clamp(0.88rem, 1.1vw, 1rem)/1.45 'Lucida Sans', 'Lucida Grande', sans-serif;
+        font: clamp(0.85rem, 0.4vw + 1vh, 1rem)/1.4 'Lucida Sans', 'Lucida Grande', sans-serif;
     }
 
     .highlights {
         display: grid;
-        gap: 0.65rem;
-        margin: 0 0 1.25rem;
+        gap: clamp(0.4rem, 1.5vh, 0.75rem);
+        margin: 0 0 clamp(0.6rem, 2.5vh, 1.1rem);
         padding-left: 1.25rem;
         color: #CFD6EE;
-        font: clamp(0.82rem, 1.2vw, 0.94rem)/1.55 'Lucida Sans', 'Lucida Grande', sans-serif;
+        font: clamp(0.8rem, 0.5vw + 0.9vh, 0.98rem)/1.45 'Lucida Sans', 'Lucida Grande', sans-serif;
+        flex-shrink: 1;
     }
 
     .highlights li::marker {
@@ -167,41 +293,24 @@ const experiences = [
     .skills {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.6rem;
+        gap: clamp(0.4rem, 1vh, 0.6rem);
         margin: 0;
         padding: 0;
         list-style: none;
     }
 
     .skills li {
-        padding: 0.38rem 0.75rem;
+        padding: clamp(0.28rem, 0.8vh, 0.38rem) clamp(0.55rem, 1.5vw, 0.75rem);
         border-radius: 999px;
         color: #1E1E2E;
         background: rgba(207, 214, 238, 0.88);
-        font: 0.72rem 'Lucida Sans', 'Lucida Grande', sans-serif;
+        font-size: clamp(0.65rem, 0.3vw + 0.6vh, 0.72rem);
+        font-family: 'Lucida Sans', 'Lucida Grande', sans-serif;
     }
 
     @media (max-width: 650px) {
-        .experience-list {
-            margin-top: 2.25rem;
-        }
-
-        .experience {
-            grid-template-columns: 1fr;
-            gap: 0.7rem;
-        }
-
-        .date-column {
-            display: flex;
-            align-items: center;
-            gap: 0.85rem;
-            padding-top: 0;
-        }
-
-        .logo-frame {
-            width: 2.5rem;
-            height: 2.5rem;
-            margin-top: 0;
+        .skills {
+            justify-content: center;
         }
     }
 </style>
