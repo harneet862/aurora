@@ -60,6 +60,52 @@ import Flower from './Flower.astro';
 			if (sideMenu?.classList.contains('active')) toggleMenu();
 		});
 	});
+
+	const sections = document.querySelectorAll('main > section[id]');
+	const navLinks = document.querySelectorAll('.right a, .side-menu-links a');
+
+	function setActiveSection(id) {
+		navLinks.forEach((link) => {
+			link.classList.toggle('active', link.getAttribute('href') === `/#${id}`);
+		});
+	}
+
+	if (sections.length && navLinks.length) {
+		// The last section may be too short for the page to scroll it flush under
+		// the header, so it can never enter the observer's normal detection band.
+		// Once the page is scrolled to its end, that section must win regardless
+		// of what the (asynchronous) IntersectionObserver last reported.
+		const lastSection = sections[sections.length - 1];
+		function applyBottomOverride() {
+			const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+			if (atBottom) setActiveSection(lastSection.id);
+			return atBottom;
+		}
+
+		const sectionObserver = new IntersectionObserver(
+			(entries) => {
+				if (applyBottomOverride()) return;
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) setActiveSection(entry.target.id);
+				});
+			},
+			{ rootMargin: '-20% 0px -70% 0px', threshold: 0 }
+		);
+		sections.forEach((section) => sectionObserver.observe(section));
+
+		window.addEventListener('scroll', applyBottomOverride, { passive: true });
+	}
+
+	// Navbar starts transparent (nothing to distinguish it from at the very top)
+	// and picks up a blurred, tinted background once content is scrolling under it.
+	const navEl = document.querySelector('.nav');
+	if (navEl) {
+		const updateNavBackground = () => {
+			navEl.classList.toggle('scrolled', window.scrollY > 10);
+		};
+		updateNavBackground();
+		window.addEventListener('scroll', updateNavBackground, { passive: true });
+	}
 </script>
 
 <style>
@@ -68,7 +114,14 @@ import Flower from './Flower.astro';
 		position: sticky;
 		top: 0;
 		z-index: 20;
-		background: #1E1E2E;
+		background: rgba(30, 30, 46, 0);
+		transition: background-color 0.4s ease-out, backdrop-filter 0.4s ease-out;
+	}
+
+	.nav.scrolled {
+		background: rgba(30, 30, 46, 0.82);
+		backdrop-filter: blur(10px);
+		-webkit-backdrop-filter: blur(10px);
 	}
 
 	.nav-inner {
@@ -106,7 +159,8 @@ import Flower from './Flower.astro';
 		text-decoration: none;
 	}
 
-	.right a:hover {
+	.right a:hover,
+	.right a.active {
 		color: #EEDEDB;
 	}
 
@@ -204,6 +258,10 @@ import Flower from './Flower.astro';
 	.side-menu-links a:hover {
 		color: #CFD6EE;
 		transform: translateX(0.4rem);
+	}
+
+	.side-menu-links a.active {
+		border-bottom-color: rgba(207, 214, 238, 0.5);
 	}
 
 	.close-btn {

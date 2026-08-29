@@ -1,5 +1,5 @@
 <footer>
-    <div class="end">
+    <div class="end reveal">
         <div class ="touch">
             <p>LET'S CONNECT</p>
         </div>
@@ -20,13 +20,10 @@
 
 <style>
     footer{
-        position: sticky;
-        bottom: 0;
         width: 100%;
         background: #1E1E2E;
         margin-top: auto;
         padding: 0.5rem 0;
-        z-index: 20;
     }
 
     .touch{
@@ -55,6 +52,13 @@
 
     .social-links a{
         color: #EEDEDB;
+        display: inline-flex;
+        transition: transform 0.25s ease-out;
+    }
+
+    .social-links a:hover,
+    .social-links a:focus-visible {
+        transform: translateY(-2px) scale(1.08);
     }
     p{
         margin:0%;

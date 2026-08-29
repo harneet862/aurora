@@ -19,25 +19,30 @@ const skillGroups = [
     <main>
         <section id="home">
             <div id="text">
-                <p id="greetings">HELLO!</p>
-                <div id="nameflower">
+                <p id="greetings" class="reveal">HELLO!</p>
+                <div id="nameflower" class="reveal" style="--reveal-delay: 120ms;">
                     <p id="name">I'm Harneet</p>
-                    <Flower/>
+                    <Flower floating/>
                 </div>
-                <p id="introduction">I build thoughtful software at the intersection of engineering, AI, and real-world impact.</p>
+                <p id="introduction" class="reveal" style="--reveal-delay: 240ms;">I build thoughtful software at the intersection of engineering, AI, and real-world impact.</p>
             </div>
             <div id="mypic">
                 <img src="/me.jpeg" alt="Harneet's photo">
             </div>
+            <a href="/#about" class="scroll-cue reveal" style="--reveal-delay: 360ms;" aria-label="Scroll to About section">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </a>
         </section>
 
         <section id="about" aria-labelledby="about-heading">
             <div class="about-content">
-                <p class="eyebrow">AN OVERVIEW OF ME</p>
-                <p class="section-heading" id="about-heading">Introduction</p>
-                <p class="text">I’m a 4th-year Computer Science student at the University of Alberta who enjoys using technology to solve real-world problems and build things that are actually useful.</p>
-                <p class="text">My interest in programming started with Harvard’s CS50 course, which introduced me to coding and problem-solving. Since then, I’ve been learning more about machine learning, software engineering, and how technology can be used to help people.</p>
-                <p class="text">Outside of coding, I like reading books, going for walks, and checking out new food spots around the city.</p>
+                <p class="eyebrow reveal">AN OVERVIEW OF ME</p>
+                <p class="section-heading reveal" id="about-heading">Introduction</p>
+                <p class="text reveal" style="--reveal-delay: 150ms;">I’m a 4th-year Computer Science student at the University of Alberta who enjoys using technology to solve real-world problems and build things that are actually useful.</p>
+                <p class="text reveal" style="--reveal-delay: 150ms;">My interest in programming started with Harvard’s CS50 course, which introduced me to coding and problem-solving. Since then, I’ve been learning more about machine learning, software engineering, and how technology can be used to help people.</p>
+                <p class="text reveal" style="--reveal-delay: 150ms;">Outside of coding, I like reading books, going for walks, and checking out new food spots around the city.</p>
             </div>
         </section>
 
@@ -49,8 +54,8 @@ const skillGroups = [
                 </div>
 
                 <div class="skills-grid">
-                    {skillGroups.map((group) => (
-                        <section class="skill-group" aria-labelledby={`skill-${group.title}`}>
+                    {skillGroups.map((group, i) => (
+                        <section class="skill-group reveal" style={`--reveal-delay: ${i * 100}ms;`} aria-labelledby={`skill-${group.title}`}>
                             <h2 id={`skill-${group.title}`}>{group.title}</h2>
                             <ul>
                                 {group.skills.map((skill) => <li>{skill}</li>)}
@@ -62,7 +67,7 @@ const skillGroups = [
         </section>
 
         <section id="experiences" aria-labelledby="experiences-heading">
-            <div class="experiences-heading">
+            <div class="experiences-heading reveal">
                 <p class="eyebrow">WHAT I'VE DONE SO FAR</p>
                 <p class="section-heading" id="experiences-heading">Work Experience</p>
             </div>
@@ -70,8 +75,10 @@ const skillGroups = [
         </section>
 
         <section id="projects" aria-labelledby="projects-heading">
-            <p class="eyebrow">PROJECTS</p>
-            <h1 class="section-heading" id="projects-heading">Coming soon...</h1>
+            <div class="reveal">
+                <p class="eyebrow">PROJECTS</p>
+                <h1 class="section-heading" id="projects-heading">Coming soon...</h1>
+            </div>
         </section>
     </main>
     <Footerfile />
@@ -84,7 +91,7 @@ const skillGroups = [
     }
 
     main > section {
-        scroll-snap-align: start;
+        min-height: calc(100vh - var(--header-h));
     }
 
     .eyebrow {
@@ -109,6 +116,7 @@ const skillGroups = [
 
     /* Home */
     #home {
+        position: relative;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -116,6 +124,27 @@ const skillGroups = [
         min-height: min(calc(100dvh - var(--header-h)), 42rem);
         gap: 5%;
         padding: clamp(1.25rem, 4vh, 2rem) clamp(1.25rem, 14vw, 9rem);
+    }
+
+    .scroll-cue {
+        position: absolute;
+        left: 50%;
+        bottom: clamp(1rem, 3vh, 2rem);
+        transform: translateX(-50%);
+        display: flex;
+        color: #CFD6EE;
+        opacity: 0.6;
+        transition: opacity 0.2s ease;
+    }
+
+    .scroll-cue:hover {
+        opacity: 1;
+    }
+
+    @media screen and (max-width: 800px) {
+        .scroll-cue {
+            display: none;
+        }
     }
 
     #text {
@@ -174,9 +203,9 @@ const skillGroups = [
     #about {
         display: flex;
         justify-content: center;
-        padding: 0 clamp(1.25rem, 14vw, 9rem);
-        min-height: min(calc(100vh - var(--header-h)), 42rem);
-        min-height: min(calc(100dvh - var(--header-h)), 42rem);
+        padding: clamp(1.5rem, 6vh, 3rem) clamp(1.25rem, 14vw, 9rem);
+        min-height: min(calc(100vh - var(--header-h)), 28rem);
+        min-height: min(calc(100dvh - var(--header-h)), 28rem);
     }
 
     .about-content {
@@ -207,8 +236,8 @@ const skillGroups = [
         display: flex;
         align-items: center;
         padding: clamp(1.5rem, 6vh, 3rem) clamp(1.25rem, 14vw, 9rem);
-        min-height: min(calc(100vh - var(--header-h)), 42rem);
-        min-height: min(calc(100dvh - var(--header-h)), 42rem);
+        min-height: min(calc(100vh - var(--header-h)), 46rem);
+        min-height: min(calc(100dvh - var(--header-h)), 46rem);
     }
 
     .skills-inner {
@@ -275,8 +304,8 @@ const skillGroups = [
     #experiences {
         display: flex;
         flex-direction: column;
-        height: calc(100vh - var(--header-h) - var(--footer-h));
-        height: calc(100dvh - var(--header-h) - var(--footer-h));
+        min-height: min(calc(100vh - var(--header-h)), 46rem);
+        min-height: min(calc(100dvh - var(--header-h)), 46rem);
         padding: clamp(1.5rem, 6vh, 3rem) clamp(1.25rem, 14vw, 9rem);
         box-sizing: border-box;
     }
@@ -294,8 +323,8 @@ const skillGroups = [
     #projects {
         display: grid;
         place-items: center;
-        height: calc(100vh - var(--header-h) - var(--footer-h));
-        height: calc(100dvh - var(--header-h) - var(--footer-h));
+        min-height: min(calc(100vh - var(--header-h)), 16rem);
+        min-height: min(calc(100dvh - var(--header-h)), 16rem);
         padding: clamp(1.5rem, 6vh, 3rem) clamp(1.25rem, 14vw, 9rem);
         box-sizing: border-box;
         text-align: center;

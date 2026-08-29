@@ -63,7 +63,8 @@ const experiences = [
         <div class="timeline-track" aria-hidden="true"></div>
         {experiences.map((experience, i) => (
             <button
-                class="timeline-node"
+                class="timeline-node reveal"
+                style={`--reveal-delay: ${i * 90}ms; --reveal-distance: 10px;`}
                 role="tab"
                 type="button"
                 aria-selected={i === 0 ? 'true' : 'false'}
@@ -80,7 +81,7 @@ const experiences = [
         ))}
     </div>
 
-    <div class="experience-panels">
+    <div class="experience-panels reveal" style="--reveal-delay: 380ms; --reveal-distance: 10px;">
         {experiences.map((experience, i) => (
             <article
                 class="panel"
