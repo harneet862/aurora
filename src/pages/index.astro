@@ -27,7 +27,7 @@ const skillGroups = [
                 <p id="introduction">I build thoughtful software at the intersection of engineering, AI, and real-world impact.</p>
             </div>
             <div id="mypic">
-                <img src="me.jpeg" alt="Harneet's photo">
+                <img src="/me.jpeg" alt="Harneet's photo">
             </div>
         </section>
 
@@ -84,7 +84,6 @@ const skillGroups = [
     }
 
     main > section {
-        scroll-margin-top: var(--header-h);
         scroll-snap-align: start;
     }
 
@@ -113,7 +112,8 @@ const skillGroups = [
         display: flex;
         justify-content: center;
         align-items: center;
-        min-height: min(calc(100vh - var(--header-offset-hero)), 42rem);
+        min-height: min(calc(100vh - var(--header-h)), 42rem);
+        min-height: min(calc(100dvh - var(--header-h)), 42rem);
         gap: 5%;
         padding: clamp(1.25rem, 4vh, 2rem) clamp(1.25rem, 14vw, 9rem);
     }
@@ -175,7 +175,8 @@ const skillGroups = [
         display: flex;
         justify-content: center;
         padding: 0 clamp(1.25rem, 14vw, 9rem);
-        height: min(calc(100vh - var(--header-offset-hero)), 42rem);
+        min-height: min(calc(100vh - var(--header-h)), 42rem);
+        min-height: min(calc(100dvh - var(--header-h)), 42rem);
     }
 
     .about-content {
@@ -206,7 +207,8 @@ const skillGroups = [
         display: flex;
         align-items: center;
         padding: clamp(1.5rem, 6vh, 3rem) clamp(1.25rem, 14vw, 9rem);
-        min-height: min(calc(100vh - var(--header-offset-hero)), 42rem);
+        min-height: min(calc(100vh - var(--header-h)), 42rem);
+        min-height: min(calc(100dvh - var(--header-h)), 42rem);
     }
 
     .skills-inner {
@@ -250,7 +252,6 @@ const skillGroups = [
         color: #CFD6EE;
         font: clamp(0.72rem, 0.5vw + 0.9vh, 0.92rem) 'Lucida Sans', 'Lucida Grande', sans-serif;
         transition: background-color 0.2s ease, color 0.2s ease;
-        white-space: nowrap;
     }
 
     .skill-group li:hover {
@@ -262,9 +263,11 @@ const skillGroups = [
         .skills-grid {
             column-gap: clamp(1rem, 5vw, 2rem);
         }
+    }
 
-        .skill-group li {
-            white-space: normal;
+    @media (max-width: 480px) {
+        .skills-grid {
+            grid-template-columns: 1fr;
         }
     }
 
@@ -273,6 +276,7 @@ const skillGroups = [
         display: flex;
         flex-direction: column;
         height: calc(100vh - var(--header-h) - var(--footer-h));
+        height: calc(100dvh - var(--header-h) - var(--footer-h));
         padding: clamp(1.5rem, 6vh, 3rem) clamp(1.25rem, 14vw, 9rem);
         box-sizing: border-box;
     }
@@ -291,6 +295,7 @@ const skillGroups = [
         display: grid;
         place-items: center;
         height: calc(100vh - var(--header-h) - var(--footer-h));
+        height: calc(100dvh - var(--header-h) - var(--footer-h));
         padding: clamp(1.5rem, 6vh, 3rem) clamp(1.25rem, 14vw, 9rem);
         box-sizing: border-box;
         text-align: center;
