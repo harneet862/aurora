@@ -19,7 +19,7 @@ const skillGroups = [
     <main>
         <section id="home">
             <div id="text">
-                <p id="greetings" class="reveal">HELLO!</p>
+                <p id="greetings" class="reveal reveal-dim">HELLO!</p>
                 <div id="nameflower" class="reveal" style="--reveal-delay: 120ms;">
                     <p id="name">I'm Harneet</p>
                     <Flower floating/>
@@ -29,7 +29,7 @@ const skillGroups = [
             <div id="mypic">
                 <img src="/me.jpeg" alt="Harneet's photo">
             </div>
-            <a href="/#about" class="scroll-cue reveal" style="--reveal-delay: 360ms;" aria-label="Scroll to About section">
+            <a href="/#about" class="scroll-cue reveal reveal-dim" style="--reveal-delay: 360ms;" aria-label="Scroll to About section">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
@@ -38,11 +38,11 @@ const skillGroups = [
 
         <section id="about" aria-labelledby="about-heading">
             <div class="about-content">
-                <p class="eyebrow reveal">AN OVERVIEW OF ME</p>
+                <p class="eyebrow reveal reveal-dim">AN OVERVIEW OF ME</p>
                 <p class="section-heading reveal" id="about-heading">Introduction</p>
                 <p class="text reveal" style="--reveal-delay: 150ms;">I’m a 4th-year Computer Science student at the University of Alberta who enjoys using technology to solve real-world problems and build things that are actually useful.</p>
-                <p class="text reveal" style="--reveal-delay: 150ms;">My interest in programming started with Harvard’s CS50 course, which introduced me to coding and problem-solving. Since then, I’ve been learning more about machine learning, software engineering, and how technology can be used to help people.</p>
-                <p class="text reveal" style="--reveal-delay: 150ms;">Outside of coding, I like reading books, going for walks, and checking out new food spots around the city.</p>
+                <p class="text reveal" style="--reveal-delay: 230ms;">My interest in programming started with Harvard’s CS50 course, which introduced me to coding and problem-solving. Since then, I’ve been learning more about machine learning, software engineering, and how technology can be used to help people.</p>
+                <p class="text reveal" style="--reveal-delay: 310ms;">Outside of coding, I like reading books, going for walks, and checking out new food spots around the city.</p>
             </div>
         </section>
 
@@ -126,15 +126,26 @@ const skillGroups = [
         padding: clamp(1.25rem, 4vh, 2rem) clamp(1.25rem, 14vw, 9rem);
     }
 
+    /* Owns its own transform (horizontal centering) and transition (hover fade),
+       so it folds the shared reveal's slide/fade into those same declarations
+       here rather than relying on the .reveal-dim utility, which a same-property
+       rule this specific would otherwise silently override. */
     .scroll-cue {
         position: absolute;
         left: 50%;
         bottom: clamp(1rem, 3vh, 2rem);
-        transform: translateX(-50%);
         display: flex;
         color: #CFD6EE;
         opacity: 0.6;
-        transition: opacity 0.2s ease;
+        filter: opacity(0%);
+        transform: translate(-50%, var(--reveal-distance, 10px));
+        transition: opacity 0.35s ease, filter 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+        transition-delay: 0s, var(--reveal-delay, 0ms), var(--reveal-delay, 0ms);
+    }
+
+    .scroll-cue.is-visible {
+        filter: opacity(100%);
+        transform: translate(-50%, 0);
     }
 
     .scroll-cue:hover {

@@ -102,20 +102,38 @@
 
 	/* Shared entrance animation: an element starts hidden/offset, then eases in
 	   once .is-visible is added by the reveal observer in the script above.
-	   --reveal-delay and --reveal-distance let callers stagger without new CSS. */
-	/* filter: opacity() rather than the opacity property itself, so this never
-	   fights with an element's own opacity (several already use it, e.g. muted
-	   eyebrow/greeting text) — the two compose independently instead of colliding. */
+	   --reveal-delay and --reveal-distance let callers stagger without new CSS.
+	   opacity + transform are the two properties browsers can animate purely on
+	   the GPU compositor, so this is the smoothest possible version of this
+	   effect — will-change primes that compositor layer before the transition
+	   starts, which is what actually avoids a dropped-frame stutter at reveal.
+	   No blur: blurring text while its opacity/AA is also changing reads as
+	   smudgy rather than crisp, especially on thin serif weights. */
 	.reveal {
-		filter: opacity(0%);
-		transform: translateY(var(--reveal-distance, 20px));
-		transition: filter 0.6s ease-out, transform 0.6s ease-out;
+		opacity: 0;
+		transform: translate3d(0, var(--reveal-distance, 14px), 0);
+		transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
 		transition-delay: var(--reveal-delay, 0ms);
+		will-change: opacity, transform;
 	}
 
 	.reveal.is-visible {
+		opacity: 1;
+		transform: translate3d(0, 0, 0);
+	}
+
+	/* A few elements already declare their own opacity (muted eyebrow/greeting
+	   text) — animating opacity there would fight that existing value, so this
+	   fades via `filter: opacity()` instead, which is a separate channel. */
+	.reveal.reveal-dim {
+		opacity: 1;
+		filter: opacity(0%);
+		transition: filter 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+		will-change: filter, transform;
+	}
+
+	.reveal.reveal-dim.is-visible {
 		filter: opacity(100%);
-		transform: translateY(0);
 	}
 
 	.scroll-progress {

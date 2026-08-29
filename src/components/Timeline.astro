@@ -64,7 +64,7 @@ const experiences = [
         {experiences.map((experience, i) => (
             <button
                 class="timeline-node reveal"
-                style={`--reveal-delay: ${i * 90}ms; --reveal-distance: 10px;`}
+                style={`--reveal-delay: ${i * 90}ms; --reveal-distance: 24px;`}
                 role="tab"
                 type="button"
                 aria-selected={i === 0 ? 'true' : 'false'}
@@ -81,7 +81,7 @@ const experiences = [
         ))}
     </div>
 
-    <div class="experience-panels reveal" style="--reveal-delay: 380ms; --reveal-distance: 10px;">
+    <div class="experience-panels reveal" style="--reveal-delay: 380ms; --reveal-distance: 24px;">
         {experiences.map((experience, i) => (
             <article
                 class="panel"
@@ -109,14 +109,41 @@ const experiences = [
 <script>
     const nodes = document.querySelectorAll<HTMLButtonElement>('.experience-timeline .timeline-node');
     const panels = document.querySelectorAll<HTMLElement>('.experience-panels .panel');
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const PANEL_TRANSITION_MS = prefersReducedMotion ? 0 : 200;
+
+    let switching = false;
 
     nodes.forEach((node) => {
         node.addEventListener('click', () => {
+            if (switching) return;
             const index = node.dataset.index;
+            const activePanel = document.querySelector<HTMLElement>('.experience-panels .panel:not([hidden])');
+            const nextPanel = document.querySelector<HTMLElement>(`.experience-panels .panel[data-index="${index}"]`);
+            if (!nextPanel || nextPanel === activePanel) return;
+
             nodes.forEach((n) => n.setAttribute('aria-selected', n === node ? 'true' : 'false'));
-            panels.forEach((p) => {
-                p.hidden = p.dataset.index !== index;
-            });
+
+            if (!activePanel || PANEL_TRANSITION_MS === 0) {
+                if (activePanel) activePanel.hidden = true;
+                nextPanel.hidden = false;
+                return;
+            }
+
+            switching = true;
+            activePanel.classList.add('panel-fade-out');
+
+            window.setTimeout(() => {
+                activePanel.hidden = true;
+                activePanel.classList.remove('panel-fade-out');
+
+                nextPanel.classList.add('panel-fade-in');
+                nextPanel.hidden = false;
+                void nextPanel.offsetWidth;
+                nextPanel.classList.remove('panel-fade-in');
+
+                switching = false;
+            }, PANEL_TRANSITION_MS);
         });
     });
 </script>
@@ -236,10 +263,23 @@ const experiences = [
         flex-direction: column;
         justify-content: flex-start;
         overflow-y: auto;
+        opacity: 1;
+        transform: translateY(0);
+        transition: opacity 0.2s ease, transform 0.2s ease;
     }
 
     .panel[hidden] {
         display: none;
+    }
+
+    .panel.panel-fade-out {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    .panel.panel-fade-in {
+        opacity: 0;
+        transform: translateY(6px);
     }
 
     .panel-header {
