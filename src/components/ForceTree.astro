@@ -210,4 +210,16 @@
            makes that explicit and stops the cursor implying otherwise. */
         pointer-events: none;
     }
+
+    /* Below this width, shrinking the SVG to fit the container also shrinks
+       every node/label proportionally (they're fixed sizes inside the 960x680
+       viewBox), which makes the labels and icons illegible on phones - and
+       scrolling a diagram sideways to read it isn't great either. index.astro
+       swaps in a plain skills list at this same breakpoint, so just hide the
+       diagram here rather than trying to cram it in. */
+    @media (max-width: 700px) {
+        .force-tree {
+            display: none;
+        }
+    }
 </style>

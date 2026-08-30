@@ -5,6 +5,14 @@ import Flower from '../components/Flower.astro';
 import Footerfile from '../components/Footerfile.astro';
 import Timeline from '../components/Timeline.astro';
 import ForceTree from '../components/ForceTree.astro';
+
+const skillGroups = [
+    { title: 'Languages', skills: ['Python', 'Java', 'C/C++', 'JavaScript', 'TypeScript', 'SQL'] },
+    { title: 'Frontend', skills: ['HTML', 'CSS', 'Astro', 'React', 'Responsive Web Design'] },
+    { title: 'Backend', skills: ['Flask', 'Django', 'Node.js', 'REST APIs'] },
+    { title: 'DevOps', skills: ['Git', 'GitHub', 'Docker', 'CI/CD', 'Linux', 'Cloud Deployment'] },
+    { title: 'Databases', skills: ['MySQL', 'PostgreSQL', 'MongoDB', 'Firebase'] },
+];
 ---
 
 <Layout>
@@ -46,6 +54,19 @@ import ForceTree from '../components/ForceTree.astro';
                 </div>
 
                 <ForceTree />
+
+                <div class="skills-fallback">
+                    <div class="skills-grid">
+                        {skillGroups.map((group, i) => (
+                            <section class="skill-group reveal" style={`--reveal-delay: ${i * 100}ms;`} aria-labelledby={`skill-${group.title}`}>
+                                <h2 id={`skill-${group.title}`}>{group.title}</h2>
+                                <ul>
+                                    {group.skills.map((skill) => <li>{skill}</li>)}
+                                </ul>
+                            </section>
+                        ))}
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -137,8 +158,13 @@ import ForceTree from '../components/ForceTree.astro';
             const rect = wrapper.getBoundingClientRect();
             const scrollable = rect.height - window.innerHeight;
             const progress = scrollable > 0 ? clamp01(-rect.top / scrollable) : 0;
-            const headerHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 0;
-            const inStack = rect.top < window.innerHeight && rect.bottom > headerHeight;
+            // Headerfile.astro's nav-highlight observer uses the browser viewport as its
+            // root (not adjusted for the header) and only marks a section active once it
+            // crosses 20% down that viewport (rootMargin: '-20% 0px -70% 0px'). Handing
+            // off here at that same line - instead of the very top, 0% - keeps this in
+            // sync with that threshold, so there's no dead zone where Skills has already
+            // started appearing but the nav is still stuck showing About as active.
+            const inStack = rect.top < window.innerHeight && rect.bottom > window.innerHeight * 0.2;
             apply(progress, inStack);
         }
 
@@ -339,6 +365,68 @@ import ForceTree from '../components/ForceTree.astro';
     .heading {
         margin: 0;
         text-align: center;
+    }
+
+    /* Fallback for screens too small to render ForceTree legibly - hidden by
+       default, shown at the same 700px breakpoint where ForceTree.astro
+       hides itself (index.astro:224). */
+    .skills-fallback {
+        display: none;
+    }
+
+    @media (max-width: 700px) {
+        .skills-fallback {
+            display: block;
+        }
+    }
+
+    .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: clamp(1.5rem, 8vw, 8rem);
+        row-gap: clamp(0.75rem, 4vh, 3.5rem);
+    }
+
+    .skill-group h2 {
+        margin: 0 0 clamp(0.4rem, 2vh, 1.25rem);
+        color: #EEDEDB;
+        font: clamp(1rem, 1vw + 1.4vh, 1.65rem) Georgia, 'Times New Roman', serif;
+        font-weight: 400;
+    }
+
+    .skill-group ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: clamp(0.35rem, 1vh, 0.75rem);
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .skill-group li {
+        padding: clamp(0.25rem, 1vh, 0.48rem) clamp(0.5rem, 1.5vw, 0.9rem);
+        border: 1px solid rgba(207, 214, 238, 0.4);
+        border-radius: 999px;
+        color: #CFD6EE;
+        font: clamp(0.72rem, 0.5vw + 0.9vh, 0.92rem) 'Lucida Sans', 'Lucida Grande', sans-serif;
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .skill-group li:hover {
+        color: #1E1E2E;
+        background: #CFD6EE;
+    }
+
+    @media (max-width: 600px) {
+        .skills-grid {
+            column-gap: clamp(1rem, 5vw, 2rem);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .skills-grid {
+            grid-template-columns: 1fr;
+        }
     }
 
     /* Experiences */
