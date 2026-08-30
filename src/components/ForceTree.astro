@@ -1,0 +1,213 @@
+---
+// Self-contained, non-interactive force-directed tree diagram.
+// d3-hierarchy turns the nested data into nodes/links, d3-force settles
+// them into a layout, then it's rendered once as plain SVG - no drag,
+// no hover, no click handlers, and no re-simulation on resize (the SVG
+// just scales via viewBox).
+//
+// Edit the data in src/data/skills-tree.js - it's a plain nested object,
+// so adding/removing categories or leaves is just editing that array.
+---
+
+<div class="force-tree">
+    <svg
+        id="force-tree-svg"
+        viewBox="0 0 960 680"
+        preserveAspectRatio="xMidYMid meet"
+        role="img"
+        aria-label="Diagram of skills and tools, grouped by category"
+    ></svg>
+</div>
+
+<script>
+    import * as d3 from 'd3';
+    import data from '../data/skills-tree.js';
+
+    const WIDTH = 960;
+    const HEIGHT = 680;
+
+    const ROOT_R = 10;
+    const CATEGORY_R = 7;
+    const LEAF_SIZE = 30; // icon badge square side, in svg units
+
+    const COLOR_LINK = 'rgba(207, 214, 238, 0.35)';
+    const COLOR_ROOT = '#EEDEDB';
+    const COLOR_CATEGORY = 'rgba(238, 222, 219, 0.75)';
+    const COLOR_TEXT = '#CFD6EE';
+    const COLOR_BADGE_FILL = 'rgba(207, 214, 238, 0.08)';
+    const COLOR_BADGE_STROKE = 'rgba(207, 214, 238, 0.28)';
+
+    function radiusFor(d) {
+        if (d.depth === 0) return ROOT_R;
+        if (d.depth === 1) return CATEGORY_R;
+        return LEAF_SIZE / 2;
+    }
+
+    function build() {
+        const svg = document.getElementById('force-tree-svg');
+        if (!svg) return;
+
+        const root = d3.hierarchy(data);
+        const nodes = root.descendants();
+        const links = root.links();
+
+        // Seed positions spread around the center in a ring rather than all
+        // stacked at (0,0) - the simulation converges the same either way,
+        // this just avoids a visible "explosion" artifact on the first ticks
+        // (irrelevant here since we render once after it's fully settled,
+        // but it does make the settled layout more evenly distributed).
+        nodes.forEach((d, i) => {
+            const angle = (i / nodes.length) * 2 * Math.PI;
+            d.x = WIDTH / 2 + Math.cos(angle) * 10;
+            d.y = HEIGHT / 2 + Math.sin(angle) * 10;
+        });
+
+        // d3.hierarchy().links() returns {source, target} pointing at the
+        // same node objects passed to forceSimulation(), so forceLink()
+        // needs no .id() accessor - it already has direct object references.
+        const simulation = d3
+            .forceSimulation(nodes)
+            .force(
+                'link',
+                d3
+                    .forceLink(links)
+                    .distance((d) => (d.source.depth === 0 ? 170 : 70))
+                    .strength(0.9)
+            )
+            .force('charge', d3.forceManyBody().strength(-260))
+            .force('center', d3.forceCenter(WIDTH / 2, HEIGHT / 2))
+            .force('collide', d3.forceCollide((d) => radiusFor(d) + 14))
+            .stop();
+
+        // Run headless instead of letting it animate - 300 ticks is comfortably
+        // more than enough for a tree this size to fully settle.
+        for (let i = 0; i < 300; i++) simulation.tick();
+
+        render(svg, nodes, links);
+    }
+
+    function render(svg, nodes, links) {
+        const NS = 'http://www.w3.org/2000/svg';
+        const frag = document.createDocumentFragment();
+
+        // Light dot-grid background
+        const grid = document.createElementNS(NS, 'g');
+        grid.setAttribute('class', 'dot-grid');
+        for (let x = 20; x < WIDTH; x += 28) {
+            for (let y = 20; y < HEIGHT; y += 28) {
+                const dot = document.createElementNS(NS, 'circle');
+                dot.setAttribute('cx', String(x));
+                dot.setAttribute('cy', String(y));
+                dot.setAttribute('r', '1');
+                dot.setAttribute('fill', 'rgba(207, 214, 238, 0.08)');
+                grid.appendChild(dot);
+            }
+        }
+        frag.appendChild(grid);
+
+        // Edges
+        const linkGroup = document.createElementNS(NS, 'g');
+        linkGroup.setAttribute('class', 'links');
+        links.forEach((l) => {
+            const line = document.createElementNS(NS, 'line');
+            line.setAttribute('x1', String(l.source.x));
+            line.setAttribute('y1', String(l.source.y));
+            line.setAttribute('x2', String(l.target.x));
+            line.setAttribute('y2', String(l.target.y));
+            line.setAttribute('stroke', COLOR_LINK);
+            line.setAttribute('stroke-width', '1');
+            linkGroup.appendChild(line);
+        });
+        frag.appendChild(linkGroup);
+
+        // Nodes
+        const nodeGroup = document.createElementNS(NS, 'g');
+        nodeGroup.setAttribute('class', 'nodes');
+
+        nodes.forEach((d) => {
+            const g = document.createElementNS(NS, 'g');
+            g.setAttribute('transform', `translate(${d.x}, ${d.y})`);
+
+            if (d.depth < 2) {
+                // Root / category node: filled circle + label
+                const circle = document.createElementNS(NS, 'circle');
+                circle.setAttribute('r', String(radiusFor(d)));
+                circle.setAttribute('fill', d.depth === 0 ? COLOR_ROOT : COLOR_CATEGORY);
+                g.appendChild(circle);
+
+                const label = document.createElementNS(NS, 'text');
+                label.textContent = d.data.name;
+                label.setAttribute('x', String(radiusFor(d) + 6));
+                label.setAttribute('y', '4');
+                label.setAttribute('fill', COLOR_TEXT);
+                label.setAttribute('font-size', d.depth === 0 ? '15' : '12');
+                label.setAttribute('font-family', "Georgia, 'Times New Roman', serif");
+                g.appendChild(label);
+            } else {
+                // Leaf node: rounded-square icon badge + label underneath
+                const badge = document.createElementNS(NS, 'rect');
+                badge.setAttribute('x', String(-LEAF_SIZE / 2));
+                badge.setAttribute('y', String(-LEAF_SIZE / 2));
+                badge.setAttribute('width', String(LEAF_SIZE));
+                badge.setAttribute('height', String(LEAF_SIZE));
+                badge.setAttribute('rx', '8');
+                badge.setAttribute('fill', COLOR_BADGE_FILL);
+                badge.setAttribute('stroke', COLOR_BADGE_STROKE);
+                g.appendChild(badge);
+
+                if (d.data.icon) {
+                    const img = document.createElementNS(NS, 'image');
+                    const href = `https://skillicons.dev/icons?i=${d.data.icon}`;
+                    img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', href);
+                    img.setAttribute('href', href);
+                    img.setAttribute('x', String(-LEAF_SIZE / 2 + 4));
+                    img.setAttribute('y', String(-LEAF_SIZE / 2 + 4));
+                    img.setAttribute('width', String(LEAF_SIZE - 8));
+                    img.setAttribute('height', String(LEAF_SIZE - 8));
+                    g.appendChild(img);
+                }
+
+                const label = document.createElementNS(NS, 'text');
+                label.textContent = d.data.name;
+                label.setAttribute('x', '0');
+                label.setAttribute('y', String(LEAF_SIZE / 2 + 12));
+                label.setAttribute('text-anchor', 'middle');
+                label.setAttribute('fill', COLOR_TEXT);
+                label.setAttribute('font-size', '10');
+                label.setAttribute('font-family', "'Lucida Sans', 'Lucida Grande', sans-serif");
+                g.appendChild(label);
+            }
+
+            nodeGroup.appendChild(g);
+        });
+
+        frag.appendChild(nodeGroup);
+        svg.appendChild(frag);
+    }
+
+    build();
+</script>
+
+<style>
+    .force-tree {
+        width: 100%;
+        max-width: 960px;
+        margin: 0 auto;
+    }
+
+    .force-tree svg {
+        display: block;
+        width: auto;
+        height: auto;
+        max-width: 100%;
+        /* The viewBox is wider than it is tall (960x680), so scaling by width
+           alone let it grow past the section's available height on shorter
+           screens. Capping height too and letting width shrink to match
+           keeps it fully inside the section either way. */
+        max-height: min(75vh, 640px);
+        margin: 0 auto;
+        /* Static diagram - no drag/hover/click wiring exists, this just
+           makes that explicit and stops the cursor implying otherwise. */
+        pointer-events: none;
+    }
+</style>
