@@ -11,12 +11,13 @@ const { floating = false } = Astro.props;
         padding-bottom: 4%;
     }
 
-    .floating {
-        animation: float 3s ease-in-out infinite;
+    img.floating {
+        animation: flower-float 3s ease-in-out infinite;
+        will-change: transform;
     }
 
-    @keyframes float {
+    @keyframes flower-float {
         0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-4px); }
+        50% { transform: translateY(-6px); }
     }
 </style>

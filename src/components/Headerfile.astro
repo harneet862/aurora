@@ -61,14 +61,54 @@ import Flower from './Flower.astro';
 		});
 	});
 
-	const sections = document.querySelectorAll('main > section[id]');
+	// Home and About are stacked inside a sticky scroll-jack wrapper (see
+	// index.astro's .scroll-stack), so their real position in the document
+	// doesn't match where they visually finish appearing - a plain anchor jump
+	// to #about would only scroll to where it's *starting* to slide up, not
+	// where it's fully covering the screen. This computes the scroll offset
+	// that actually lands past the scroll-stack's reveal threshold instead.
+	// Skills/Experience/Projects aren't part of that wrapper, so their links
+	// are left alone to use the browser's native anchor scrolling.
+	document.querySelectorAll<HTMLAnchorElement>('a[href^="/#"]').forEach((link) => {
+		link.addEventListener('click', (event) => {
+			const id = link.hash.slice(1);
+			if (id !== 'home' && id !== 'about') return;
+
+			const wrapper = document.querySelector<HTMLElement>('.scroll-stack');
+			const about = document.getElementById('about');
+			if (!wrapper) return;
+
+			event.preventDefault();
+			const headerH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h'));
+			const wrapperTop = window.scrollY + wrapper.getBoundingClientRect().top;
+			const targetScroll = id === 'home' ? 0 : about ? wrapperTop + about.offsetTop - headerH : 0;
+
+			window.history.pushState(null, '', link.href);
+			window.scrollTo({ top: Math.max(0, targetScroll), behavior: 'smooth' });
+
+			// The generic side-menu-link listener above already closes the menu
+			// for this same click; the active-tab highlight updates on its own
+			// as the scroll animates past the threshold (see home-about-active).
+		});
+	});
+
+	// Home and About are both position:sticky and occupy the exact same screen
+	// position for most of the scroll-stack transition, so IntersectionObserver
+	// (which only sees geometric overlap, not which one is visually on top) can't
+	// reliably tell them apart. The scroll-stack script in index.astro knows
+	// exactly which one is showing and reports it directly via this event instead.
+	const sections = document.querySelectorAll('main section[id]:not(#home):not(#about)');
 	const navLinks = document.querySelectorAll('.right a, .side-menu-links a');
 
-	function setActiveSection(id) {
+	function setActiveSection(id: string) {
 		navLinks.forEach((link) => {
 			link.classList.toggle('active', link.getAttribute('href') === `/#${id}`);
 		});
 	}
+
+	window.addEventListener('home-about-active', (event) => {
+		setActiveSection((event as CustomEvent<{ id: string }>).detail.id);
+	});
 
 	if (sections.length && navLinks.length) {
 		// The last section may be too short for the page to scroll it flush under

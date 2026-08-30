@@ -17,29 +17,33 @@ const skillGroups = [
 <Layout>
     <Headerfile />
     <main>
-        <section id="home">
-            <div id="text">
-                <p id="greetings" class="reveal reveal-dim">HELLO!</p>
-                <div id="nameflower" class="reveal" style="--reveal-delay: 120ms;">
-                    <p id="name">I'm Harneet</p>
-                    <Flower floating/>
+        <div class="scroll-stack">
+            <section id="home">
+                <div class="home-content">
+                    <div id="text">
+                        <p id="greetings" class="reveal reveal-dim">HELLO!</p>
+                        <div id="nameflower" class="reveal" style="--reveal-delay: 120ms;">
+                            <p id="name">I'm Harneet</p>
+                            <Flower floating/>
+                        </div>
+                        <p id="introduction" class="reveal" style="--reveal-delay: 240ms;">I build thoughtful software at the intersection of engineering, AI, and real-world impact.</p>
+                    </div>
+                    <div id="mypic">
+                        <img src="/me.jpeg" alt="Harneet's photo">
+                    </div>
                 </div>
-                <p id="introduction" class="reveal" style="--reveal-delay: 240ms;">I build thoughtful software at the intersection of engineering, AI, and real-world impact.</p>
-            </div>
-            <div id="mypic">
-                <img src="/me.jpeg" alt="Harneet's photo">
-            </div>
-        </section>
+            </section>
 
-        <section id="about" aria-labelledby="about-heading">
-            <div class="about-content">
-                <p class="eyebrow reveal reveal-dim">AN OVERVIEW OF ME</p>
-                <p class="section-heading reveal" id="about-heading">Introduction</p>
-                <p class="text reveal" style="--reveal-delay: 150ms;">I’m a 4th-year Computer Science student at the University of Alberta who enjoys using technology to solve real-world problems and build things that are actually useful.</p>
-                <p class="text reveal" style="--reveal-delay: 230ms;">My interest in programming started with Harvard’s CS50 course, which introduced me to coding and problem-solving. Since then, I’ve been learning more about machine learning, software engineering, and how technology can be used to help people.</p>
-                <p class="text reveal" style="--reveal-delay: 310ms;">Outside of coding, I like reading books, going for walks, and checking out new food spots around the city.</p>
-            </div>
-        </section>
+            <section id="about" aria-labelledby="about-heading">
+                <div class="about-content">
+                    <p class="eyebrow reveal reveal-dim">AN OVERVIEW OF ME</p>
+                    <p class="section-heading reveal" id="about-heading">Introduction</p>
+                    <p class="text reveal" style="--reveal-delay: 150ms;">I’m a 4th-year Computer Science student at the University of Alberta who enjoys using technology to solve real-world problems and build things that are actually useful.</p>
+                    <p class="text reveal" style="--reveal-delay: 230ms;">My interest in programming started with Harvard’s CS50 course, which introduced me to coding and problem-solving. Since then, I’ve been learning more about machine learning, software engineering, and how technology can be used to help people.</p>
+                    <p class="text reveal" style="--reveal-delay: 310ms;">Outside of coding, I like reading books, going for walks, and checking out new food spots around the city.</p>
+                </div>
+            </section>
+        </div>
 
         <section id="skills" aria-labelledby="skills-heading">
             <div class="skills-inner">
@@ -79,6 +83,93 @@ const skillGroups = [
     <Footerfile />
 </Layout>
 
+<script>
+    // Home -> About scroll-triggered cover transition.
+    // Below 50% progress through the wrapper, About tracks the scroll 1:1 (no transition).
+    // Crossing 50% (in either direction) hands off to a single eased CSS transition that
+    // finishes the reveal/hide, so About visually "overtakes" Home instead of just following
+    // the scrollbar the whole way.
+    (() => {
+        const wrapper = document.querySelector<HTMLElement>('.scroll-stack');
+        const panelB = document.getElementById('about');
+        const panelA = document.getElementById('home');
+        if (!wrapper || !panelB || !panelA) return;
+
+        const THRESHOLD = 0.3;
+        const EASE_MS = 550;
+        const EASED_CURVE = 'cubic-bezier(0.16, 1, 0.3, 1)';
+        const EASED_TRANSFORM = `transform ${EASE_MS}ms ${EASED_CURVE}`;
+        const EASED_FILTER = `filter ${EASE_MS}ms ${EASED_CURVE}`;
+        const MAX_BLUR_PX = 10;
+
+        let over = false;
+        let wasInStack = false;
+        let settleTimer: number | undefined;
+        let ticking = false;
+
+        const clamp01 = (value: number) => Math.min(1, Math.max(0, value));
+
+        function trackedTransform(progress: number) {
+            return `translateY(${(1 - progress) * 100}%)`;
+        }
+
+        // Both the transform target and the blur amount always reflect the live scroll
+        // position (never frozen), so there's nothing to "catch up" on once the eased
+        // hand-off window ends - that staleness was what made the crossing feel like a
+        // snap instead of smooth. Home blurs out underneath as About slides over it,
+        // rather than just sitting there sharp until it's abruptly covered.
+        function apply(progress: number, inStack: boolean) {
+            const desiredOver = progress >= THRESHOLD;
+            const panelChanged = desiredOver !== over;
+
+            if (panelChanged) {
+                over = desiredOver;
+                panelB.style.transition = EASED_TRANSFORM;
+                panelA.style.transition = EASED_FILTER;
+                window.clearTimeout(settleTimer);
+                settleTimer = window.setTimeout(() => {
+                    panelB.style.transition = 'none';
+                    panelA.style.transition = 'none';
+                }, EASE_MS);
+
+            }
+
+            if (inStack && (!wasInStack || panelChanged)) {
+                window.dispatchEvent(new CustomEvent('home-about-active', {
+                    detail: { id: desiredOver ? 'about' : 'home' },
+                }));
+            }
+
+            wasInStack = inStack;
+
+            panelB.style.transform = over ? 'translateY(0%)' : trackedTransform(progress);
+
+            const blurPx = (over ? 1 : progress) * MAX_BLUR_PX;
+            panelA.style.filter = blurPx > 0 ? `blur(${blurPx}px)` : 'none';
+        }
+
+        function update() {
+            ticking = false;
+            const rect = wrapper.getBoundingClientRect();
+            const scrollable = rect.height - window.innerHeight;
+            const progress = scrollable > 0 ? clamp01(-rect.top / scrollable) : 0;
+            const headerHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 0;
+            const inStack = rect.top < window.innerHeight && rect.bottom > headerHeight;
+            apply(progress, inStack);
+        }
+
+        function onScroll() {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(update);
+        }
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll);
+        update();
+    })();
+</script>
+
 <style>
     main {
         display: flex;
@@ -109,16 +200,33 @@ const skillGroups = [
         margin: 0;
     }
 
+    /* Home -> About scroll-triggered cover transition */
+    .scroll-stack {
+        position: relative;
+        height: 200vh;
+        height: 200dvh;
+    }
+
     /* Home */
     #home {
-        position: relative;
+        position: sticky;
+        top: var(--header-h);
+        z-index: 1;
         display: flex;
         justify-content: center;
         align-items: center;
-        min-height: calc(100vh - var(--header-h));
-        min-height: calc(100dvh - var(--header-h));
-        gap: 5%;
+        height: calc(100vh - var(--header-h));
+        height: calc(100dvh - var(--header-h));
         padding: 0 clamp(1.25rem,14vw,9rem);
+        box-sizing: border-box;
+        filter: none;
+    }
+
+    .home-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5%;
         width: 100%;
         max-width: var(--content-max);
         margin: 0 auto;
@@ -178,11 +286,30 @@ const skillGroups = [
 
     /* About */
     #about {
+        position: sticky;
+        top: var(--header-h);
+        z-index: 2;
         display: flex;
         justify-content: center;
         padding: 0 clamp(1.25rem, 14vw, 9rem);
-        min-height: calc(100vh - var(--header-h));
-        min-height: calc(100dvh - var(--header-h));
+        height: calc(100vh - var(--header-h));
+        height: calc(100dvh - var(--header-h));
+        box-sizing: border-box;
+        background-color: #1E1E2E;
+        transform: translateY(100%);
+        will-change: transform;
+    }
+
+    /* Softens About's leading edge as it slides over Home, instead of a hard cut line. */
+    #about::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: -60px;
+        height: 60px;
+        background: linear-gradient(to bottom, rgba(30, 30, 46, 0), rgba(30, 30, 46, 1));
+        pointer-events: none;
     }
 
     .about-content {
@@ -190,7 +317,7 @@ const skillGroups = [
         justify-content: center;
         flex-direction: column;
         width: min(100%, var(--content-max));
-        margin: 0 auto;
+        margin: 0 auto;   
     }
 
     #about .eyebrow,
@@ -238,7 +365,7 @@ const skillGroups = [
     }
 
     .skill-group h2 {
-        margin: 0;
+        margin: 0 0 clamp(0.4rem, 2vh, 1.25rem);
         color: #EEDEDB;
         font: clamp(1rem, 1vw + 1.4vh, 1.65rem) Georgia, 'Times New Roman', serif;
         font-weight: 400;
