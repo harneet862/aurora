@@ -13,17 +13,16 @@ A beautifully designed, interactive portfolio website showcasing skills, work ex
 
 ## 🛠️ Tech Stack
 
-### Core Framework
-- **Astro 5.16.16** – Static site generator for fast, component-based web pages
-- **JavaScript/TypeScript** – Client-side interactivity and animations
+### Framework
+- **Astro 5.16.16** – Static site generator for component-based web pages
 
-### Key Libraries
+### Libraries
 - **D3 7.9.0** – Force-directed graph layout for skills visualization (force simulation, hierarchy, SVG rendering)
 
 ### Languages
-- **Astro** – Component-based templating
-- **JavaScript** – Scroll event handling, DOM manipulation, D3 scripting
-- **CSS** – Responsive grid layouts, animations, and styling
+- **HTML** – Semantic markup and page structure
+- **CSS** – Responsive layouts, animations, and styling
+- **JavaScript** – Scroll event handling, DOM manipulation, D3 scripting, and interactivity
 
 ## 📁 Project Structure
 
@@ -84,10 +83,10 @@ tsconfig.json                     TypeScript settings
 - `ForceTree.astro` imports nested data from `skills-tree.js`
 - D3 converts it to a hierarchy (root → categories → skills)
 - Force simulation applied with:
-  - **Link force** – keeps parent-child connections (distance: 170px for root, 70px for others)
-  - **Charge force** – repels nodes from each other (-260 strength)
-  - **Collision** – prevents overlap based on node radius
-  - **Center** – pulls toward viewport center
+   - **Link force** – keeps parent-child connections (distance: 170px for root, 70px for others)
+   - **Charge force** – repels nodes from each other (-260 strength)
+   - **Collision** – prevents overlap based on node radius
+   - **Center** – pulls toward viewport center
 - Simulation runs **headlessly** for 300 ticks, then renders as static SVG once (no drag/hover)
 - Leaf nodes (skills) fetch icons from [skillicons.dev](https://skillicons.dev)
 
@@ -173,4 +172,4 @@ This project is open source. Feel free to use it as a template for your own port
 
 ---
 
-**Built with ❤️ using Astro**
+**Built with ❤️ using Astro, HTML, CSS, and JavaScript**
