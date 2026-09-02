@@ -24,6 +24,21 @@ A beautifully designed, interactive portfolio website showcasing skills, work ex
 - **CSS** – Responsive layouts, animations, and styling
 - **JavaScript** – Scroll event handling, DOM manipulation, D3 scripting, and interactivity
 
+## 📊 Why Astro? Analysis
+
+| Design Consideration | How Astro Helps | Where Astro Does **Not** Help Much | Decision for My Portfolio |
+| --- | --- | --- | --- |
+| **Static website** | Generates optimized static HTML at build time. | My portfolio was already written as static HTML, so Astro does not fundamentally make it static. | ⚠️ Small benefit |
+| **Performance** | Static Astro components ship as HTML with **no JavaScript required by default**. | Since I was already using minimal vanilla JavaScript, the performance improvement may be limited. | ✅ Helpful |
+| **Reusable components** | Allows reusable components such as `Header`, `Footer`, and `ProjectCard` without duplicating markup across pages. | Plain HTML alone does not provide convenient build-time component imports. | ✅ Major benefit |
+| **Avoiding client-side JS** | Static components are rendered during the build rather than constructed in the browser. | Web Components would require JavaScript to load and register components in the browser. | ✅ Major benefit |
+| **Interactivity** | Supports interactive components when needed and allows JavaScript/framework components to be isolated. | My site already uses vanilla JS only where interaction is required, so Islands Architecture is not a major advantage for me. | ⚠️ Small benefit |
+| **Islands Architecture** | Prevents unnecessary JavaScript from being shipped for non-interactive components. | I already follow this principle manually by only writing JS for interactive features. | ❌ Not a major reason |
+| **Project organization** | Provides a clear structure for pages, layouts, and reusable components. | A small HTML/CSS project can also be organized well without Astro. | ✅ Helpful as the site grows |
+| **Routing** | Automatically maps files in the `pages` directory to URLs. | With a small static website, manually managing HTML pages is also straightforward. | ⚠️ Convenience benefit |
+| **Learning curve** | Introduces modern concepts such as components, layouts, and build-time rendering. | Adds another tool and syntax to learn compared with pure HTML/CSS/JS. | ⚠️ Tradeoff |
+| **Templates** | Provides optional starter templates and integrations. | I don't need templates because I am designing and building the portfolio myself. | ❌ Not a reason for choosing Astro |
+
 ## 📁 Project Structure
 
 ```
